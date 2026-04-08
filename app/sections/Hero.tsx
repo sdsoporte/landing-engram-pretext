@@ -4,26 +4,24 @@ import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Star, GitFork } from 'lucide-react';
 
-// CACHE BUST v3 — Force redeploy
-
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Gradient overlay for better text readability over global neural background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[--color-base]/70 via-[--color-base]/50 to-[--color-base]/70" />
+      {/* Overlay para legibilidad sobre neural global */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[--color-base]/60 via-[--color-base]/40 to-[--color-base]/60" />
 
       <Container className="relative z-10 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
-
-          {/* Etymology badge */}
-          <div className="inline-flex flex-col sm:flex-row items-center gap-2 px-6 py-3 rounded-full bg-[--color-surface0]/80 border border-[--color-mauve]/30 backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto">
+          
+          {/* Badge etimológico */}
+          <div className="mb-6 inline-flex flex-col sm:flex-row items-center gap-2 px-5 py-2.5 rounded-full bg-[--color-surface0]/70 border border-[--color-mauve]/25 backdrop-blur-sm">
             <span className="text-sm font-mono font-semibold text-[--color-mauve]">engram</span>
             <span className="hidden sm:block text-[--color-surface2]">·</span>
-            <span className="text-sm text-[--color-subtext0] italic">/ˈen.ɡræm/ — neuroscience: the physical trace of a memory</span>
+            <span className="text-sm text-[--color-subtext0] italic">/ˈen.ɡræm/ — the physical trace of memory</span>
           </div>
 
-          {/* Product Name */}
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight">
+          {/* Título principal */}
+          <h1 className="mb-6 text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight">
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: 'linear-gradient(to right, var(--color-mauve), var(--color-pink), var(--color-blue))' }}
@@ -32,26 +30,25 @@ export function Hero() {
             </span>
           </h1>
 
-          {/* Hook */}
-          <div className="space-y-3 max-w-3xl mx-auto">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[--color-text] leading-snug">
+          {/* Hook emocional */}
+          <div className="mb-8 space-y-3">
+            <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[--color-text]">
               Your AI forgets everything.{' '}
-              <span className="text-[--color-mauve]">Engram gives it a brain.</span>
+              <span className="text-[--color-mauve]">We give it a brain.</span>
             </p>
             <p className="text-base sm:text-lg text-[--color-subtext0]">
-              No Node.js. No Python. No Docker.{' '}
-              <span className="text-[--color-text] font-medium">One binary, one SQLite file.</span>
+              One binary. One SQLite file. Zero dependencies.
             </p>
           </div>
 
-          {/* Brew install */}
-          <div className="inline-flex items-center gap-3 px-5 py-3 rounded-lg bg-[--color-crust] border border-[--color-surface1] font-mono text-sm">
+          {/* Brew command */}
+          <div className="mb-8 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[--color-crust]/80 border border-[--color-surface1] font-mono text-sm">
             <span className="text-[--color-green]">$</span>
             <span className="text-[--color-text]">brew install gentleman-programming/tap/engram</span>
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+          <div className="mb-10 flex flex-col sm:flex-row gap-3 justify-center items-center">
             <Button href="#installation" size="lg">
               Get Started
               <ArrowRight className="w-5 h-5" />
@@ -67,26 +64,20 @@ export function Hero() {
           </div>
 
           {/* GitHub stats */}
-          <div className="flex flex-wrap justify-center gap-6 pt-4 text-[--color-subtext0] text-sm">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap justify-center gap-5 text-[--color-subtext0] text-sm">
+            <div className="flex items-center gap-1.5">
               <Star className="w-4 h-4 text-[--color-yellow]" />
               <span className="font-semibold text-[--color-text]">2.3k</span>
               <span>stars</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <GitFork className="w-4 h-4 text-[--color-blue]" />
               <span className="font-semibold text-[--color-text]">252</span>
               <span>forks</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[--color-green]" />
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[--color-green]" />
               <span className="font-semibold text-[--color-text]">v1.11.0</span>
-              <span>latest</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[--color-mauve]" />
-              <span className="font-semibold text-[--color-text]">51</span>
-              <span>releases</span>
             </div>
           </div>
         </div>
@@ -104,7 +95,7 @@ export function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer"
         aria-label="Scroll to next section"
       >
-        <div className="w-6 h-10 rounded-full border-2 border-[--color-subtext0]/40 flex items-start justify-center p-1 hover:border-[--color-mauve] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-mauve]">
+        <div className="w-6 h-10 rounded-full border-2 border-[--color-subtext0]/30 flex items-start justify-center p-1 hover:border-[--color-mauve] transition-colors">
           <div className="w-1.5 h-3 rounded-full bg-[--color-subtext0]/40 animate-pulse" />
         </div>
       </button>

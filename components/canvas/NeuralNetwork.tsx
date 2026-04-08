@@ -49,8 +49,8 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
 
     nodesRef.current = [];
 
-    // MÁS NODOS: 35-45 (vs 20-28 antes)
-    const nodeCount = Math.max(35, Math.min(45, Math.floor((width * height) / 18000)));
+    // Más nodos y MUCHO más grandes
+    const nodeCount = Math.max(40, Math.min(55, Math.floor((width * height) / 12000)));
 
     for (let i = 0; i < nodeCount; i++) {
       const x = Math.random() * width;
@@ -60,10 +60,10 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
       nodes.push({
         x,
         y,
-        vx: (Math.random() - 0.5) * 0.05,
-        vy: (Math.random() - 0.5) * 0.05,
-        // MÁS GRANDES: +1px de radio
-        radius: isMain ? Math.random() * 2.5 + 3.5 : Math.random() * 2 + 2.5,
+        vx: (Math.random() - 0.5) * 0.04,
+        vy: (Math.random() - 0.5) * 0.04,
+        // NODOS MUCHO MÁS GRANDES: antes 2.5-3.5, ahora 5-8px
+        radius: isMain ? Math.random() * 3 + 5 : Math.random() * 2 + 4,
         color: NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)],
         pulse: Math.random() * Math.PI * 2,
         pulseSpeed: 0.02 + Math.random() * 0.015,
@@ -80,8 +80,8 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
 
     ctx.clearRect(0, 0, width, height);
 
-    // Conexiones más visibles
-    ctx.globalAlpha = 0.35;
+    // Conexiones más visibles - distancia mayor
+    ctx.globalAlpha = 0.4;
     for (let i = 0; i < nodes.length; i++) {
       let connectionCount = 0;
       for (let j = i + 1; j < nodes.length && connectionCount < MAX_CONNECTIONS_PER_NODE; j++) {
@@ -89,14 +89,15 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
         const dy = nodes[i].y - nodes[j].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < connectionDistance) {
-          const opacity = (1 - distance / connectionDistance) * 0.6;
+        // DISTANCIA MAYOR para más conexiones visibles
+        if (distance < connectionDistance * 1.5) {
+          const opacity = (1 - distance / (connectionDistance * 1.5)) * 0.7;
 
           ctx.beginPath();
           ctx.moveTo(nodes[i].x, nodes[i].y);
           ctx.lineTo(nodes[j].x, nodes[j].y);
           ctx.strokeStyle = `rgba(${CONNECTION_COLOR_RGB}, ${opacity})`;
-          ctx.lineWidth = 0.8;
+          ctx.lineWidth = 1.2; // Líneas más gruesas
           ctx.stroke();
           connectionCount++;
         }
@@ -110,32 +111,32 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
       const pulseScale = 1 + Math.sin(node.pulse) * 0.15;
 
       if (node.isMain) {
-        // Glow más pronunciado para nodos principales
+        // Glow más pronunciado para nodos principales - MUCHO MÁS GRANDE
         const gradient = ctx.createRadialGradient(
           node.x,
           node.y,
           0,
           node.x,
           node.y,
-          node.radius * 3.5 * pulseScale
+          node.radius * 5 * pulseScale // Aumentado de 3.5 a 5
         );
         gradient.addColorStop(0, node.color);
-        gradient.addColorStop(0.3, node.color + '70');
+        gradient.addColorStop(0.3, node.color + '90'); // Más opaco
         gradient.addColorStop(1, 'transparent');
 
         ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius * 3.5 * pulseScale, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, node.radius * 5 * pulseScale, 0, Math.PI * 2);
         ctx.fillStyle = gradient;
-        ctx.globalAlpha = 0.5;
+        ctx.globalAlpha = 0.6; // Más visible
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
-      // Nodo base - más opaco para que se vea
+      // Nodo base - MUCHO más opaco y grande
       ctx.beginPath();
       ctx.arc(node.x, node.y, node.radius * pulseScale, 0, Math.PI * 2);
       ctx.fillStyle = node.color;
-      ctx.globalAlpha = node.isMain ? 0.9 : 0.7;
+      ctx.globalAlpha = node.isMain ? 0.95 : 0.85; // Mucho más opaco
       ctx.fill();
       ctx.globalAlpha = 1;
 

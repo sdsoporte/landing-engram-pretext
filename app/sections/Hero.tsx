@@ -2,7 +2,6 @@
 
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/Button';
-import { NeuralNetwork } from '@/components/canvas/NeuralNetwork';
 import { ArrowRight, Star, GitFork } from 'lucide-react';
 
 // CACHE BUST v3 — Force redeploy
@@ -10,11 +9,8 @@ import { ArrowRight, Star, GitFork } from 'lucide-react';
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Neural network background */}
-      <div className="absolute inset-0 z-0">
-        <NeuralNetwork className="opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[--color-base]/90 via-[--color-base]/50 to-[--color-base]/90" />
-      </div>
+      {/* Gradient overlay for better text readability over global neural background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[--color-base]/70 via-[--color-base]/50 to-[--color-base]/70" />
 
       <Container className="relative z-10 text-center">
         <div className="max-w-4xl mx-auto space-y-8">

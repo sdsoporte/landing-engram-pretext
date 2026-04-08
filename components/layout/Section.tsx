@@ -7,10 +7,11 @@ interface SectionProps {
   variant?: 'default' | 'muted' | 'accent';
 }
 
+// Semi-transparent backgrounds to show global neural network
 const variantStyles = {
-  default: 'bg-[--color-base]',
-  muted: 'bg-[--color-mantle]',
-  accent: 'bg-[--color-crust]',
+  default: 'bg-[--color-base]/85 backdrop-blur-sm',
+  muted: 'bg-[--color-mantle]/90 backdrop-blur-sm',
+  accent: 'bg-[--color-crust]/95 backdrop-blur-sm',
 };
 
 export function Section({
@@ -23,7 +24,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        'py-16 sm:py-20 lg:py-24',
+        'py-16 sm:py-20 lg:py-24 relative z-10',
         variantStyles[variant],
         className
       )}

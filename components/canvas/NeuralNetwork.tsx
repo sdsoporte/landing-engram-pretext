@@ -16,32 +16,29 @@ interface Node {
   color: string;
   pulse: number;
   pulseSpeed: number;
+  isMain: boolean; // Solo los nodos principales brillan
 }
 
-// Catppuccin Mocha accent colors - extracted as named constants
+// Catppuccin Mocha accent colors - más sutiles para fondo global
 const COLORS = {
   mauve: '#cba6f7',
   pink: '#f5c2e7',
   blue: '#89b4fa',
-  red: '#f38ba8',
-  green: '#a6e3a1',
-  peach: '#fab387',
   lavender: '#b4befe',
   white: '#ffffff',
 };
 
+// Solo 4 colores, más sutiles
 const NODE_COLORS = [
   COLORS.mauve,
-  COLORS.pink,
   COLORS.blue,
-  COLORS.red,
-  COLORS.green,
-  COLORS.peach,
   COLORS.lavender,
+  COLORS.pink,
 ];
 
-const CONNECTION_COLOR_RGB = '203, 166, 247'; // mauve RGB for rgba()
-const MAX_CONNECTIONS_PER_NODE = 4; // Limit to avoid O(n²) explosion
+const CONNECTION_COLOR_RGB = '139, 148, 158'; // surface2 color - más sutil
+const MAX_CONNECTIONS_PER_NODE = 2; // Menos conexiones
+const MAIN_NODE_CHANCE = 0.3; // 30% de los nodos son "principales" y brillan
 
 export function NeuralNetwork({ className }: NeuralNetworkProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,25 +49,27 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
   function initNodes(width: number, height: number) {
     if (width === 0 || height === 0) return;
 
-    // Clear existing nodes to prevent memory leak on resize
     nodesRef.current = [];
 
     const nodes: Node[] = [];
-    // Reduced from 50-70 to 35-45 for better performance
-    const nodeCount = Math.max(35, Math.min(45, Math.floor((width * height) / 15000)));
+    // Muchos menos nodos para fondo sutil: 20-28
+    const nodeCount = Math.max(20, Math.min(28, Math.floor((width * height) / 25000)));
 
     for (let i = 0; i < nodeCount; i++) {
       const x = Math.random() * width;
       const y = Math.random() * height;
+      const isMain = Math.random() < MAIN_NODE_CHANCE;
+      
       nodes.push({
         x,
         y,
-        vx: (Math.random() - 0.5) * 0.08,
-        vy: (Math.random() - 0.5) * 0.08,
-        radius: Math.random() * 3 + 3,
+        vx: (Math.random() - 0.5) * 0.04, // Movimiento más lento
+        vy: (Math.random() - 0.5) * 0.04,
+        radius: isMain ? Math.random() * 2 + 3 : Math.random() * 1.5 + 2, // Nodos principales son más grandes
         color: NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)],
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.02,
+        pulseSpeed: 0.015 + Math.random() * 0.015, // Pulso más lento
+        isMain,
       });
     }
 
@@ -79,12 +78,12 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
 
   function draw(ctx: CanvasRenderingContext2D, width: number, height: number, time: number) {
     const nodes = nodesRef.current;
-    const connectionDistance = Math.min(width, height) * 0.15;
+    const connectionDistance = Math.min(width, height) * 0.12; // Distancia menor
 
     ctx.clearRect(0, 0, width, height);
 
-    // Draw connections with early exit optimization
-    ctx.globalAlpha = 0.6;
+    // Conexiones muy sutiles
+    ctx.globalAlpha = 0.25;
     for (let i = 0; i < nodes.length; i++) {
       let connectionCount = 0;
       for (let j = i + 1; j < nodes.length && connectionCount < MAX_CONNECTIONS_PER_NODE; j++) {
@@ -93,14 +92,13 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < connectionDistance) {
-          const opacity = 1 - distance / connectionDistance;
-          const pulse = Math.sin(time + nodes[i].pulse) * 0.3 + 0.7;
+          const opacity = (1 - distance / connectionDistance) * 0.5;
 
           ctx.beginPath();
           ctx.moveTo(nodes[i].x, nodes[i].y);
           ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.strokeStyle = `rgba(${CONNECTION_COLOR_RGB}, ${opacity * pulse * 0.4})`;
-          ctx.lineWidth = opacity * 2;
+          ctx.strokeStyle = `rgba(${CONNECTION_COLOR_RGB}, ${opacity})`;
+          ctx.lineWidth = 0.5;
           ctx.stroke();
           connectionCount++;
         }
@@ -108,42 +106,50 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     }
     ctx.globalAlpha = 1;
 
-    // Draw nodes with glow
+    // Dibujar nodos
     for (const node of nodes) {
       node.pulse += node.pulseSpeed;
-      const pulseScale = 1 + Math.sin(node.pulse) * 0.2;
+      const pulseScale = 1 + Math.sin(node.pulse) * 0.15;
 
-      // Outer glow
-      const gradient = ctx.createRadialGradient(
-        node.x,
-        node.y,
-        0,
-        node.x,
-        node.y,
-        node.radius * 4 * pulseScale
-      );
-      gradient.addColorStop(0, node.color);
-      gradient.addColorStop(0.5, node.color + '80');
-      gradient.addColorStop(1, 'transparent');
+      if (node.isMain) {
+        // Solo los nodos principales tienen glow
+        const gradient = ctx.createRadialGradient(
+          node.x,
+          node.y,
+          0,
+          node.x,
+          node.y,
+          node.radius * 3 * pulseScale
+        );
+        gradient.addColorStop(0, node.color);
+        gradient.addColorStop(0.4, node.color + '60');
+        gradient.addColorStop(1, 'transparent');
 
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 4 * pulseScale, 0, Math.PI * 2);
-      ctx.fillStyle = gradient;
-      ctx.fill();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius * 3 * pulseScale, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.globalAlpha = 0.4;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
 
-      // Inner node
+      // Nodo interno (todos los nodos)
       ctx.beginPath();
       ctx.arc(node.x, node.y, node.radius * pulseScale, 0, Math.PI * 2);
       ctx.fillStyle = node.color;
-      ctx.fill();
-
-      // Bright center
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 0.4 * pulseScale, 0, Math.PI * 2);
-      ctx.fillStyle = COLORS.white;
-      ctx.globalAlpha = 0.6;
+      ctx.globalAlpha = node.isMain ? 0.8 : 0.5; // Nodos principales más opacos
       ctx.fill();
       ctx.globalAlpha = 1;
+
+      // Centro brillante solo para nodos principales
+      if (node.isMain) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius * 0.3 * pulseScale, 0, Math.PI * 2);
+        ctx.fillStyle = COLORS.white;
+        ctx.globalAlpha = 0.4;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
     }
   }
 
@@ -154,7 +160,7 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
       node.x += node.vx;
       node.y += node.vy;
 
-      const padding = 50;
+      const padding = 30;
       if (node.x < padding) {
         node.vx = Math.abs(node.vx) * 0.8;
         node.x = padding;
@@ -181,7 +187,6 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    // Use logical dimensions (CSS pixels) for consistency with handleResize
     const dpr = window.devicePixelRatio || 1;
     const logicalWidth = canvas.width / dpr;
     const logicalHeight = canvas.height / dpr;
@@ -209,7 +214,6 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
         const width = parent.clientWidth;
         const height = parent.clientHeight;
         if (width > 0 && height > 0) {
-          // DPR handling for sharp rendering on Retina displays
           const dpr = window.devicePixelRatio || 1;
           canvas.width = width * dpr;
           canvas.height = height * dpr;
@@ -229,7 +233,6 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // Page Visibility API - pause animation when tab is hidden to save battery
     const handleVisibilityChange = () => {
       if (document.hidden) {
         if (animationRef.current) {

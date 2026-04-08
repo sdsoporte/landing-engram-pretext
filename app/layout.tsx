@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { NeuralNetwork } from "@/components/canvas/NeuralNetwork";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -70,7 +71,11 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[--color-base] text-[--color-text]">
+      <body className="min-h-full flex flex-col bg-[--color-base] text-[--color-text] relative">
+        {/* Global neural network background */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <NeuralNetwork className="opacity-30" />
+        </div>
         {children}
       </body>
     </html>

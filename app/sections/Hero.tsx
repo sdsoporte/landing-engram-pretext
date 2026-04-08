@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { NeuralNetwork } from '@/components/canvas/NeuralNetwork';
 import { ArrowRight, Star, GitFork } from 'lucide-react';
 
+// Redesign v2 - emotional copy from README
+
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

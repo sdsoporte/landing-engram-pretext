@@ -3,7 +3,7 @@
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/Button';
 import { NeuralNetwork } from '@/components/canvas/NeuralNetwork';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star, GitFork } from 'lucide-react';
 
 export function Hero() {
   return (
@@ -11,20 +11,21 @@ export function Hero() {
       {/* Neural network background */}
       <div className="absolute inset-0 z-0">
         <NeuralNetwork className="opacity-70" />
-        {/* Denser overlay for better text contrast */}
         <div className="absolute inset-0 bg-gradient-to-b from-[--color-base]/90 via-[--color-base]/50 to-[--color-base]/90" />
       </div>
 
       <Container className="relative z-10 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
-          {/* Open Source badge */}
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[--color-surface0]/80 border border-[--color-mauve]/30 backdrop-blur-sm">
-            <div className="w-3 h-3 rounded-full bg-[--color-mauve] animate-pulse shadow-lg shadow-[--color-mauve]/50" />
-            <span className="text-base font-mono font-semibold text-[--color-text]">Open Source</span>
+
+          {/* Etymology badge — the definition IS the hook */}
+          <div className="inline-flex flex-col sm:flex-row items-center gap-2 px-6 py-3 rounded-full bg-[--color-surface0]/80 border border-[--color-mauve]/30 backdrop-blur-sm">
+            <span className="text-sm font-mono font-semibold text-[--color-mauve]">engram</span>
+            <span className="hidden sm:block text-[--color-surface2]">·</span>
+            <span className="text-sm text-[--color-subtext0] italic">/ˈen.ɡræm/ — neuroscience: the physical trace of a memory in the brain</span>
           </div>
 
           {/* Product Name */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight">
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: 'linear-gradient(to right, var(--color-mauve), var(--color-pink), var(--color-blue))' }}
@@ -33,23 +34,26 @@ export function Hero() {
             </span>
           </h1>
 
-          {/* Tagline */}
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-[--color-text]">
-            Persistent memory for AI agents
-          </h2>
-
-          {/* Value prop — separated from specs */}
-          <div className="space-y-2 max-w-2xl mx-auto">
-            <p className="text-xl sm:text-2xl text-[--color-text] font-medium leading-relaxed">
-              Give your AI coding assistant a long-term memory.
+          {/* Emotional hook — straight from the README */}
+          <div className="space-y-3 max-w-3xl mx-auto">
+            <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[--color-text] leading-snug">
+              Your AI forgets everything.{' '}
+              <span className="text-[--color-mauve]">Engram gives it a brain.</span>
             </p>
             <p className="text-base sm:text-lg text-[--color-subtext0]">
-              Cross-platform • Zero dependencies • Works with any agent
+              No Node.js. No Python. No Docker.{' '}
+              <span className="text-[--color-text] font-medium">One binary, one SQLite file.</span>
             </p>
           </div>
 
-          {/* CTA buttons — single primary, demoted secondary */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          {/* Quick install teaser */}
+          <div className="inline-flex items-center gap-3 px-5 py-3 rounded-lg bg-[--color-crust] border border-[--color-surface1] font-mono text-sm">
+            <span className="text-[--color-green]">$</span>
+            <span className="text-[--color-text]">brew install gentleman-programming/tap/engram</span>
+          </div>
+
+          {/* CTA buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
             <Button href="#installation" size="lg">
               Get Started
               <ArrowRight className="w-5 h-5" />
@@ -64,25 +68,33 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 pt-8 text-[--color-subtext0]">
+          {/* Real stats from GitHub */}
+          <div className="flex flex-wrap justify-center gap-6 pt-4 text-[--color-subtext0] text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[--color-green] shadow-sm shadow-[--color-green]/50" />
-              <span>Go Binary</span>
+              <Star className="w-4 h-4 text-[--color-yellow]" />
+              <span className="font-semibold text-[--color-text]">2.3k</span>
+              <span>stars</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[--color-blue] shadow-sm shadow-[--color-blue]/50" />
-              <span>SQLite + FTS5</span>
+              <GitFork className="w-4 h-4 text-[--color-blue]" />
+              <span className="font-semibold text-[--color-text]">252</span>
+              <span>forks</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[--color-pink] shadow-sm shadow-[--color-pink]/50" />
-              <span>MCP Compatible</span>
+              <div className="w-2 h-2 rounded-full bg-[--color-green] shadow-sm" />
+              <span className="font-semibold text-[--color-text]">v1.11.0</span>
+              <span>latest</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[--color-mauve] shadow-sm" />
+              <span className="font-semibold text-[--color-text]">51</span>
+              <span>releases</span>
             </div>
           </div>
         </div>
       </Container>
 
-      {/* Scroll indicator - keyboard accessible */}
+      {/* Scroll indicator */}
       <button
         onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
         onKeyDown={(e) => {
@@ -94,8 +106,8 @@ export function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer"
         aria-label="Scroll to next section"
       >
-        <div className="w-6 h-10 rounded-full border-2 border-[--color-subtext0]/50 flex items-start justify-center p-1 hover:border-[--color-mauve] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-mauve]">
-          <div className="w-1.5 h-3 rounded-full bg-[--color-subtext0]/50 animate-pulse" />
+        <div className="w-6 h-10 rounded-full border-2 border-[--color-subtext0]/40 flex items-start justify-center p-1 hover:border-[--color-mauve] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-mauve]">
+          <div className="w-1.5 h-3 rounded-full bg-[--color-subtext0]/40 animate-pulse" />
         </div>
       </button>
     </section>

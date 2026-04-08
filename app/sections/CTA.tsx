@@ -6,26 +6,27 @@ import { Star, ExternalLink } from 'lucide-react';
 export function CTA() {
   return (
     <Section id="cta" className="relative overflow-hidden">
-      {/* Stronger gradient for visual impact */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/30 via-[--color-base] to-[--color-pink]/30" />
+      {/* Full gradient background — the dramatic climax */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/40 via-[--color-base] to-[--color-pink]/40" />
 
       <Container className="relative z-10">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Star icon */}
           <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-full bg-[--color-mauve]/20 border border-[--color-mauve]/30 flex items-center justify-center">
-              <Star className="w-10 h-10 text-[--color-mauve]" />
+            <div className="w-24 h-24 rounded-full bg-[--color-mauve]/30 border-2 border-[--color-mauve]/50 flex items-center justify-center shadow-lg shadow-[--color-mauve]/20">
+              <Star className="w-12 h-12 text-[--color-mauve]" />
             </div>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[--color-text]">
-            Ready to give your AI agent{' '}
-            <span className="text-[--color-mauve]">persistent memory</span>?
+          {/* Headline — emotional, from README */}
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[--color-text]">
+            Give your AI a{' '}
+            <span className="text-[--color-mauve]">brain</span>
           </h2>
 
-          <p className="text-lg text-[--color-subtext0] max-w-xl mx-auto">
-            Open source, MIT licensed. Built by developers, for developers.
-            Star the repo and start using engram today.
+          {/* Subheadline */}
+          <p className="text-xl text-[--color-subtext0] max-w-xl mx-auto">
+            Join <span className="text-[--color-text] font-semibold">2,300+ developers</span> who never repeat the same explanation twice.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -49,18 +50,22 @@ export function CTA() {
             </Button>
           </div>
 
-          {/* Stats with dividers */}
-          <div className="flex flex-wrap justify-center gap-0 pt-8 text-[--color-subtext0] divide-x divide-[--color-surface1]">
+          {/* Final stats — real numbers */}
+          <div className="flex flex-wrap justify-center gap-8 pt-8 text-[--color-subtext0] divide-x divide-[--color-surface1]/50">
             <div className="text-center px-8">
-              <div className="text-2xl font-bold text-[--color-text]">Growing</div>
-              <div className="text-sm">Community</div>
+              <div className="text-3xl font-bold text-[--color-text]">2.3k</div>
+              <div className="text-sm">GitHub Stars</div>
             </div>
             <div className="text-center px-8">
-              <div className="text-2xl font-bold text-[--color-text]">Go</div>
-              <div className="text-sm">Single Binary</div>
+              <div className="text-3xl font-bold text-[--color-text]">252</div>
+              <div className="text-sm">Forks</div>
             </div>
             <div className="text-center px-8">
-              <div className="text-2xl font-bold text-[--color-text]">MIT</div>
+              <div className="text-3xl font-bold text-[--color-text]">51</div>
+              <div className="text-sm">Releases</div>
+            </div>
+            <div className="text-center px-8">
+              <div className="text-3xl font-bold text-[--color-text]">MIT</div>
               <div className="text-sm">License</div>
             </div>
           </div>

@@ -6,22 +6,22 @@ const problems = [
   {
     icon: <Brain className="w-6 h-6" />,
     title: 'Lost Context',
-    description: 'Every new session starts blank. No memory of previous decisions, patterns, or discussions.',
+    description: 'Your AI starts every session blank. No memory of previous decisions, patterns, or discussions.',
   },
   {
     icon: <RefreshCw className="w-6 h-6" />,
-    title: 'Repeated Mistakes',
+    title: 'Repeated Work',
     description: 'The same bugs get fixed multiple times. Solutions are rediscovered instead of reused.',
   },
   {
     icon: <AlertTriangle className="w-6 h-6" />,
-    title: 'Fragmented Understanding',
+    title: 'Fragmented Knowledge',
     description: 'Knowledge is scattered across chats, docs, and commits. No unified memory store.',
   },
   {
     icon: <Puzzle className="w-6 h-6" />,
     title: 'No Continuity',
-    description: "Context from Monday's session is gone by Tuesday. Every conversation starts from zero.",
+    description: "Context from Monday's work is gone by Tuesday. Every conversation starts from zero.",
   },
 ];
 
@@ -31,11 +31,11 @@ export function Problem() {
       <Container>
         <div className="max-w-3xl mx-auto text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[--color-text] mb-4">
-            AI agents forget <span className="text-[--color-red]">everything</span>
+            Your AI forgets{' '}
+            <span className="text-[--color-red]">everything</span>
           </h2>
           <p className="text-lg text-[--color-subtext0]">
-            Without persistent memory, your AI coding assistant loses context between sessions.
-            This leads to inefficiency, repeated work, and fragmented understanding.
+            When the session ends, it all disappears. Decisions, patterns, discussions — gone.
           </p>
         </div>
 

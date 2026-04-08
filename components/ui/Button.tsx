@@ -9,6 +9,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   external?: boolean;
+  disabled?: boolean;
 }
 
 const variantStyles = {
@@ -37,6 +38,7 @@ export function Button({
   onClick,
   className,
   external,
+  disabled,
 }: ButtonProps) {
   const styles = cn(
     'inline-flex items-center justify-center gap-2 rounded-lg font-semibold',
@@ -63,7 +65,7 @@ export function Button({
   }
 
   return (
-    <button type="button" onClick={onClick} className={styles}>
+    <button type="button" onClick={onClick} disabled={disabled} className={styles}>
       {children}
     </button>
   );

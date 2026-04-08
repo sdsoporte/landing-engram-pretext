@@ -57,17 +57,17 @@ export function CTA() {
               {/* Stats — as connected nodes */}
               <div className="flex flex-wrap justify-center gap-6 sm:gap-8 pt-8">
                 {[
-                  { value: '2.3k', label: 'GitHub Stars', color: 'yellow' },
-                  { value: '252', label: 'Forks', color: 'blue' },
-                  { value: '51', label: 'Releases', color: 'mauve' },
-                  { value: 'MIT', label: 'License', color: 'green' },
+                  { value: '2.3k', label: 'GitHub Stars', colorClass: 'text-[--color-yellow]' },
+                  { value: '252', label: 'Forks', colorClass: 'text-[--color-blue]' },
+                  { value: '51', label: 'Releases', colorClass: 'text-[--color-mauve]' },
+                  { value: 'MIT', label: 'License', colorClass: 'text-[--color-green]' },
                 ].map((stat, index) => (
                   <div key={index} className="flex items-center gap-3">
                     {index > 0 && (
                       <div className="hidden sm:block w-8 h-px bg-gradient-to-r from-transparent via-[--color-surface1] to-transparent" />
                     )}
                     <div className="text-center px-2">
-                      <div className={`text-2xl sm:text-3xl font-bold text-[--color-${stat.color}]`}>{stat.value}</div>
+                      <div className={`text-2xl sm:text-3xl font-bold ${stat.colorClass}`}>{stat.value}</div>
                       <div className="text-sm text-[--color-subtext0]">{stat.label}</div>
                     </div>
                   </div>

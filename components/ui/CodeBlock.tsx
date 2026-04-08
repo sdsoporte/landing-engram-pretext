@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Check, Copy } from 'lucide-react';
 
@@ -14,12 +14,19 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language = 'bash', filename, className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
+  // Cleanup timeout on unmount to prevent memory leak
+  useEffect(() => {
+    if (!copied) return;
+    
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
   const handleCopy = async () => {
     let textArea: HTMLTextAreaElement | null = null;
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       // Fallback for older browsers or non-HTTPS contexts
       console.error('Failed to copy:', error);
@@ -32,7 +39,6 @@ export function CodeBlock({ code, language = 'bash', filename, className }: Code
       try {
         document.execCommand('copy');
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
       } catch (fallbackError) {
         console.error('Fallback copy failed:', fallbackError);
       }

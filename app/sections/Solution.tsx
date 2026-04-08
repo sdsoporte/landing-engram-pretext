@@ -26,8 +26,8 @@ export function Solution() {
                 'Timeline with progressive disclosure',
                 'Session context injection on startup',
                 'Git sync for team collaboration',
-              ].map((item, index) => (
-                <li key={index} className="flex items-center gap-3">
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-3">
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[--color-green]/20 flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full bg-[--color-green]" />
                   </div>

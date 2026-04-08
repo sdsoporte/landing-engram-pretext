@@ -229,23 +229,37 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-  if (!reducedMotion) {
-    animate();
-  } else {
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (ctx) {
-      // DPR was already handled in handleResize, just draw
-      const dpr = window.devicePixelRatio || 1;
-      const logicalWidth = canvas.width / dpr;
-      const logicalHeight = canvas.height / dpr;
-      if (logicalWidth > 0 && logicalHeight > 0) {
-        draw(ctx, logicalWidth, logicalHeight, 0);
+    // Page Visibility API - pause animation when tab is hidden to save battery
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
+      } else if (!reducedMotion) {
+        animate();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    if (!reducedMotion) {
+      animate();
+    } else {
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (ctx) {
+        const dpr = window.devicePixelRatio || 1;
+        const logicalWidth = canvas.width / dpr;
+        const logicalHeight = canvas.height / dpr;
+        if (logicalWidth > 0 && logicalHeight > 0) {
+          draw(ctx, logicalWidth, logicalHeight, 0);
+        }
       }
     }
-  }
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

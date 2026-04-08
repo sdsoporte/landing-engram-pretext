@@ -41,9 +41,9 @@ export function Problem() {
 
         {/* Problem nodes — organic, rounded, with glow */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {problems.map((problem, index) => (
+          {problems.map((problem) => (
             <div
-              key={index}
+              key={problem.title}
               className="group relative flex items-start gap-4 p-6 rounded-3xl bg-gradient-to-br from-[--color-crust] to-[--color-mantle] border border-[--color-red]/20 hover:border-[--color-red]/50 transition-all duration-300 hover:shadow-[0_0_30px_-5px_var(--color-red)]/10"
             >
               {/* Icon node */}

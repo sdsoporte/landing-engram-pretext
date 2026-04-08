@@ -25,69 +25,101 @@ export function Installation() {
             </p>
           </div>
 
-          {/* Step 1 */}
-          <div className="space-y-4 mb-10">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm">1</div>
-              <h3 className="text-lg font-semibold text-[--color-text]">Install engram</h3>
-            </div>
-            <CodeBlock code="brew install gentleman-programming/tap/engram" language="bash" filename="macOS / Linux via Homebrew" />
-            <p className="text-sm text-[--color-subtext0] pl-11">
-              Windows, Linux (apt/deb/rpm) and manual install →{' '}
-              <a
-                href="https://github.com/Gentleman-Programming/engram/blob/main/docs/INSTALLATION.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[--color-mauve] hover:text-[--color-pink] transition-colors underline underline-offset-2"
-              >
-                docs/INSTALLATION.md
-              </a>
-            </p>
-          </div>
+          {/* Steps as connected nodes */}
+          <div className="relative">
+            {/* Connection line */}
+            <div className="absolute left-4 top-8 bottom-8 w-px bg-gradient-to-b from-[--color-mauve]/50 via-[--color-mauve]/30 to-[--color-green]/50 hidden sm:block" />
 
-          {/* Step 2 */}
-          <div className="space-y-4 mb-10">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm">2</div>
-              <h3 className="text-lg font-semibold text-[--color-text]">Connect your agent — one command per agent</h3>
-            </div>
-            <div className="rounded-xl overflow-hidden border border-[--color-surface1] divide-y divide-[--color-surface1]">
-              {agentSetup.map((item) => (
-                <div key={item.agent} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 px-4 py-3 bg-[--color-surface0]">
-                  <span className="text-sm font-semibold text-[--color-mauve] sm:w-28 flex-shrink-0">{item.agent}</span>
-                  <code className="text-xs text-[--color-subtext0] font-mono break-all">{item.cmd}</code>
-                </div>
-              ))}
-              <div className="flex items-center gap-4 px-4 py-3 bg-[--color-surface0]">
-                <span className="text-sm font-semibold text-[--color-mauve] sm:w-28 flex-shrink-0">Cursor / Windsurf</span>
+            {/* Step 1 */}
+            <div className="relative pl-0 sm:pl-12 pb-10">
+              {/* Node indicator */}
+              <div className="hidden sm:flex absolute left-0 top-0 w-8 h-8 rounded-full bg-[--color-mauve] items-center justify-center text-[--color-base] font-bold text-sm shadow-[0_0_15px_var(--color-mauve)]/50">
+                1
+              </div>
+              <div className="sm:hidden w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm mb-4 shadow-[0_0_15px_var(--color-mauve)]/50">
+                1
+              </div>
+              
+              <h3 className="text-lg font-semibold text-[--color-text] mb-4">Install engram</h3>
+              <div className="rounded-2xl overflow-hidden border border-[--color-surface1]/50 shadow-lg shadow-black/10">
+                <CodeBlock code="brew install gentleman-programming/tap/engram" language="bash" filename="macOS / Linux via Homebrew" />
+              </div>
+              <p className="text-sm text-[--color-subtext0] mt-3">
+                Windows, Linux (apt/deb/rpm) and manual install →{' '}
                 <a
-                  href="https://github.com/Gentleman-Programming/engram/blob/main/docs/AGENT-SETUP.md"
+                  href="https://github.com/Gentleman-Programming/engram/blob/main/docs/INSTALLATION.md"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[--color-subtext0] hover:text-[--color-mauve] transition-colors"
+                  className="text-[--color-mauve] hover:text-[--color-pink] transition-colors underline underline-offset-2"
                 >
-                  → docs/AGENT-SETUP.md
+                  docs/INSTALLATION.md
                 </a>
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative pl-0 sm:pl-12 pb-10">
+              <div className="hidden sm:flex absolute left-0 top-0 w-8 h-8 rounded-full bg-[--color-mauve] items-center justify-center text-[--color-base] font-bold text-sm shadow-[0_0_15px_var(--color-mauve)]/50">
+                2
+              </div>
+              <div className="sm:hidden w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm mb-4 shadow-[0_0_15px_var(--color-mauve)]/50">
+                2
+              </div>
+              
+              <h3 className="text-lg font-semibold text-[--color-text] mb-4">Connect your agent</h3>
+              <div className="rounded-2xl overflow-hidden border border-[--color-surface1]/50 divide-y divide-[--color-surface1]/50 shadow-lg shadow-black/10 bg-[--color-surface0]/50 backdrop-blur-sm">
+                {agentSetup.map((item) => (
+                  <div key={item.agent} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 px-4 py-3 hover:bg-[--color-surface0]/80 transition-colors">
+                    <span className="text-sm font-semibold text-[--color-mauve] sm:w-28 flex-shrink-0">{item.agent}</span>
+                    <code className="text-xs text-[--color-subtext0] font-mono break-all">{item.cmd}</code>
+                  </div>
+                ))}
+                <div className="flex items-center gap-4 px-4 py-3 hover:bg-[--color-surface0]/80 transition-colors">
+                  <span className="text-sm font-semibold text-[--color-mauve] sm:w-28 flex-shrink-0">Cursor / Windsurf</span>
+                  <a
+                    href="https://github.com/Gentleman-Programming/engram/blob/main/docs/AGENT-SETUP.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-[--color-subtext0] hover:text-[--color-mauve] transition-colors"
+                  >
+                    → docs/AGENT-SETUP.md
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative pl-0 sm:pl-12">
+              <div className="hidden sm:flex absolute left-0 top-0 w-8 h-8 rounded-full bg-[--color-green] items-center justify-center text-[--color-base] font-bold text-sm shadow-[0_0_15px_var(--color-green)]/50">
+                ✓
+              </div>
+              <div className="sm:hidden w-8 h-8 rounded-full bg-[--color-green] flex items-center justify-center text-[--color-base] font-bold text-sm mb-4 shadow-[0_0_15px_var(--color-green)]/50">
+                ✓
+              </div>
+              
+              <h3 className="text-lg font-semibold text-[--color-text] mb-4">That&apos;s it. Your AI now remembers.</h3>
+              <div className="rounded-2xl overflow-hidden border border-[--color-surface1]/50 shadow-lg shadow-black/10">
+                <CodeBlock code={`engram serve\n# HTTP API on http://127.0.0.1:7437\n# MCP server ready for your agent`} language="bash" />
               </div>
             </div>
           </div>
 
-          {/* Step 3 */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[--color-green] flex items-center justify-center text-[--color-base] font-bold text-sm">✓</div>
-              <h3 className="text-lg font-semibold text-[--color-text]">That&apos;s it. Your AI now remembers.</h3>
-            </div>
-            <CodeBlock code={`engram serve\n# HTTP API on http://127.0.0.1:7437\n# MCP server ready for your agent`} language="bash" />
-          </div>
-
-          {/* Requirements */}
-          <div className="mt-10 p-6 rounded-xl bg-[--color-surface0] border border-[--color-surface1]">
+          {/* Requirements — card style */}
+          <div className="mt-12 p-6 rounded-3xl bg-gradient-to-br from-[--color-surface0]/80 to-[--color-crust]/80 border border-[--color-surface1]/50 backdrop-blur-sm">
             <h4 className="font-semibold text-[--color-text] mb-4">Requirements</h4>
             <ul className="space-y-3 text-[--color-subtext0] text-sm">
-              <li className="flex items-center gap-3"><div className="w-2 h-2 rounded-full bg-[--color-green]" />Go 1.21 or later</li>
-              <li className="flex items-center gap-3"><div className="w-2 h-2 rounded-full bg-[--color-green]" />SQLite (embedded — no installation needed)</li>
-              <li className="flex items-center gap-3"><div className="w-2 h-2 rounded-full bg-[--color-green]" />Any MCP-compatible AI agent</li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green] shadow-[0_0_8px_var(--color-green)]" />
+                Go 1.21 or later
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green] shadow-[0_0_8px_var(--color-green)]" />
+                SQLite (embedded — no installation needed)
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green] shadow-[0_0_8px_var(--color-green)]" />
+                Any MCP-compatible AI agent
+              </li>
             </ul>
           </div>
         </div>

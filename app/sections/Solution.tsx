@@ -42,13 +42,16 @@ export function Solution() {
             </Button>
           </div>
 
-          {/* Right: Architecture diagram — with depth and Lucide icons */}
+          {/* Right: Neural flow diagram — organic node style */}
           <div className="relative">
-            <div className="bg-[--color-surface0] rounded-2xl p-8 border border-[--color-surface1] shadow-xl shadow-black/20">
-              <div className="space-y-6">
-                {/* AI Agent */}
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-[--color-mantle] border border-[--color-surface1]">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-blue]/20 flex items-center justify-center text-[--color-blue]">
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/5 to-[--color-blue]/5 rounded-[2rem] blur-3xl" />
+            
+            <div className="relative bg-gradient-to-br from-[--color-surface0]/80 to-[--color-crust]/80 rounded-[2rem] p-8 border border-[--color-surface1]/50 backdrop-blur-sm">
+              <div className="space-y-4">
+                {/* Agent Node */}
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-blue]/10 to-transparent border border-[--color-blue]/20 hover:border-[--color-blue]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-[--color-blue]/20 flex items-center justify-center text-[--color-blue] shadow-[0_0_15px_-3px_var(--color-blue)]/30">
                     <Bot className="w-6 h-6" />
                   </div>
                   <div>
@@ -57,14 +60,16 @@ export function Solution() {
                   </div>
                 </div>
 
-                {/* Arrow */}
-                <div className="flex justify-center">
-                  <div className="w-px h-8 bg-gradient-to-b from-[--color-blue] to-[--color-mauve]" />
+                {/* Connection line with pulse */}
+                <div className="flex justify-center py-1">
+                  <div className="relative w-px h-6 bg-gradient-to-b from-[--color-blue] to-[--color-mauve]">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[--color-mauve] animate-pulse shadow-[0_0_8px_var(--color-mauve)]" />
+                  </div>
                 </div>
 
-                {/* Engram — highlighted */}
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-[--color-mantle] border-2 border-[--color-mauve] shadow-md shadow-[--color-mauve]/10">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-mauve]/20 flex items-center justify-center text-[--color-mauve]">
+                {/* Engram Node — highlighted center */}
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-mauve]/20 to-[--color-mauve]/5 border-2 border-[--color-mauve]/40 shadow-[0_0_30px_-10px_var(--color-mauve)]/30 hover:shadow-[0_0_40px_-8px_var(--color-mauve)]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-[--color-mauve]/30 flex items-center justify-center text-[--color-mauve] shadow-[0_0_20px_-3px_var(--color-mauve)]/50">
                     <Brain className="w-6 h-6" />
                   </div>
                   <div>
@@ -73,14 +78,16 @@ export function Solution() {
                   </div>
                 </div>
 
-                {/* Arrow */}
-                <div className="flex justify-center">
-                  <div className="w-px h-8 bg-gradient-to-b from-[--color-mauve] to-[--color-green]" />
+                {/* Connection line with pulse */}
+                <div className="flex justify-center py-1">
+                  <div className="relative w-px h-6 bg-gradient-to-b from-[--color-mauve] to-[--color-green]">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[--color-green] animate-pulse shadow-[0_0_8px_var(--color-green)]" style={{ animationDelay: '0.5s' }} />
+                  </div>
                 </div>
 
-                {/* Database */}
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-[--color-mantle] border border-[--color-surface1]">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-green]/20 flex items-center justify-center text-[--color-green]">
+                {/* Database Node */}
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-green]/10 to-transparent border border-[--color-green]/20 hover:border-[--color-green]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-[--color-green]/20 flex items-center justify-center text-[--color-green] shadow-[0_0_15px_-3px_var(--color-green)]/30">
                     <Database className="w-6 h-6" />
                   </div>
                   <div>

@@ -39,22 +39,26 @@ export function Problem() {
           </p>
         </div>
 
-        {/* Problem cards — darker bg + red tint to feel "painful" vs Features */}
+        {/* Problem nodes — organic, rounded, with glow */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {problems.map((problem, index) => (
             <div
               key={index}
-              className="flex items-start gap-4 p-6 rounded-xl bg-[--color-crust] border border-[--color-red]/20 hover:border-[--color-red]/40 transition-colors duration-200"
+              className="group relative flex items-start gap-4 p-6 rounded-3xl bg-gradient-to-br from-[--color-crust] to-[--color-mantle] border border-[--color-red]/20 hover:border-[--color-red]/50 transition-all duration-300 hover:shadow-[0_0_30px_-5px_var(--color-red)]/10"
             >
-              <div className="flex-shrink-0 p-3 rounded-lg bg-[--color-red]/10 text-[--color-red]">
+              {/* Icon node */}
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[--color-red]/10 border border-[--color-red]/20 flex items-center justify-center text-[--color-red] group-hover:shadow-[0_0_20px_-2px_var(--color-red)]/30 transition-all duration-300">
                 {problem.icon}
               </div>
-              <div>
+              <div className="flex-1">
                 <h3 className="text-xl font-semibold text-[--color-text] mb-2">
                   {problem.title}
                 </h3>
                 <p className="text-[--color-subtext0] leading-relaxed">{problem.description}</p>
               </div>
+              
+              {/* Connection dot */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[--color-red]/30 group-hover:bg-[--color-red]/60 transition-colors duration-300" />
             </div>
           ))}
         </div>

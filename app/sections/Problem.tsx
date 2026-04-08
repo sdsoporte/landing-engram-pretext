@@ -21,7 +21,7 @@ const problems = [
   {
     icon: <Puzzle className="w-6 h-6" />,
     title: 'No Continuity',
-    description: 'Context from Monday\'s session is gone by Tuesday. Every conversation starts from zero.',
+    description: "Context from Monday's session is gone by Tuesday. Every conversation starts from zero.",
   },
 ];
 
@@ -39,11 +39,12 @@ export function Problem() {
           </p>
         </div>
 
+        {/* Problem cards — darker bg + red tint to feel "painful" vs Features */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {problems.map((problem, index) => (
             <div
               key={index}
-              className="flex items-start gap-4 p-6 rounded-lg bg-[--color-surface0] border border-[--color-surface1]"
+              className="flex items-start gap-4 p-6 rounded-xl bg-[--color-crust] border border-[--color-red]/20 hover:border-[--color-red]/40 transition-colors duration-200"
             >
               <div className="flex-shrink-0 p-3 rounded-lg bg-[--color-red]/10 text-[--color-red]">
                 {problem.icon}
@@ -52,7 +53,7 @@ export function Problem() {
                 <h3 className="text-xl font-semibold text-[--color-text] mb-2">
                   {problem.title}
                 </h3>
-                <p className="text-[--color-subtext0]">{problem.description}</p>
+                <p className="text-[--color-subtext0] leading-relaxed">{problem.description}</p>
               </div>
             </div>
           ))}

@@ -12,9 +12,15 @@ interface ButtonProps {
 }
 
 const variantStyles = {
-  primary: 'bg-[--color-mauve] text-[--color-base] hover:bg-[--color-pink] transition-colors',
-  secondary: 'border-2 border-[--color-mauve] text-[--color-mauve] hover:bg-[--color-mauve] hover:text-[--color-base] transition-colors',
-  ghost: 'text-[--color-subtext0] hover:text-[--color-text] transition-colors',
+  // Primary: glow shadow + active press state
+  primary:
+    'bg-[--color-mauve] text-[--color-base] hover:bg-[--color-pink] active:scale-95 transition-all duration-200 shadow-lg shadow-[--color-mauve]/20 hover:shadow-[--color-mauve]/40',
+  // Secondary: outline style, fills on hover
+  secondary:
+    'border-2 border-[--color-mauve] text-[--color-mauve] hover:bg-[--color-mauve] hover:text-[--color-base] active:scale-95 transition-all duration-200',
+  // Ghost: minimal, text only
+  ghost:
+    'text-[--color-subtext0] hover:text-[--color-text] active:scale-95 transition-all duration-200',
 };
 
 const sizeStyles = {
@@ -34,7 +40,7 @@ export function Button({
 }: ButtonProps) {
   const styles = cn(
     'inline-flex items-center justify-center gap-2 rounded-lg font-semibold',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-mauve]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-mauve] focus-visible:ring-offset-2 focus-visible:ring-offset-[--color-base]',
     'disabled:pointer-events-none disabled:opacity-50',
     variantStyles[variant],
     sizeStyles[size],

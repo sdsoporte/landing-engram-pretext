@@ -6,14 +6,14 @@ import { Star, ExternalLink } from 'lucide-react';
 export function CTA() {
   return (
     <Section id="cta" className="relative overflow-hidden">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/20 via-[--color-base] to-[--color-pink]/20" />
+      {/* Stronger gradient for visual impact */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/30 via-[--color-base] to-[--color-pink]/30" />
 
       <Container className="relative z-10">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Star icon */}
           <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-full bg-[--color-mauve]/20 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-[--color-mauve]/20 border border-[--color-mauve]/30 flex items-center justify-center">
               <Star className="w-10 h-10 text-[--color-mauve]" />
             </div>
           </div>
@@ -33,11 +33,9 @@ export function CTA() {
               href="https://github.com/Gentleman-Programming/engram"
               size="lg"
               external
-              className="gap-3"
             >
               <Star className="w-5 h-5" />
               Star on GitHub
-              <Star className="w-4 h-4 fill-current" />
             </Button>
 
             <Button
@@ -51,21 +49,21 @@ export function CTA() {
             </Button>
           </div>
 
-  {/* Stats */}
-  <div className="flex flex-wrap justify-center gap-8 pt-8 text-[--color-subtext1]">
-    <div className="text-center">
-      <div className="text-2xl font-bold text-[--color-text]">Growing</div>
-      <div className="text-sm">Community</div>
-    </div>
-    <div className="text-center">
-      <div className="text-2xl font-bold text-[--color-text]">Go</div>
-      <div className="text-sm">Single Binary</div>
-    </div>
-    <div className="text-center">
-      <div className="text-2xl font-bold text-[--color-text]">MIT</div>
-      <div className="text-sm">License</div>
-    </div>
-  </div>
+          {/* Stats with dividers */}
+          <div className="flex flex-wrap justify-center gap-0 pt-8 text-[--color-subtext0] divide-x divide-[--color-surface1]">
+            <div className="text-center px-8">
+              <div className="text-2xl font-bold text-[--color-text]">Growing</div>
+              <div className="text-sm">Community</div>
+            </div>
+            <div className="text-center px-8">
+              <div className="text-2xl font-bold text-[--color-text]">Go</div>
+              <div className="text-sm">Single Binary</div>
+            </div>
+            <div className="text-center px-8">
+              <div className="text-2xl font-bold text-[--color-text]">MIT</div>
+              <div className="text-sm">License</div>
+            </div>
+          </div>
         </div>
       </Container>
     </Section>

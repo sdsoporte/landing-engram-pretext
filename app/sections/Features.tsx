@@ -45,7 +45,7 @@ const features = [
     icon: <Shield className="w-6 h-6" />,
     title: 'Privacy Tags',
     description:
-      'Strip sensitive data with &lt;private&gt; tags. Redacted at two layers: plugin and store. Defense in depth.',
+      'Strip sensitive data with <private> tags. Redacted at two layers: plugin and store. Defense in depth.',
   },
 ];
 
@@ -58,12 +58,14 @@ export function Features() {
             Everything you need for{' '}
             <span className="text-[--color-mauve]">persistent memory</span>
           </h2>
-          <p className="text-lg text-[--color-subtext0] max-w-2xl mx-auto">
+          {/* Wider subtitle for larger screens */}
+          <p className="text-lg text-[--color-subtext0] max-w-3xl mx-auto">
             Six powerful features designed for AI coding agents. Multiple interfaces, powerful search, and team collaboration.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Responsive gap */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature) => (
             <Card
               key={feature.title}

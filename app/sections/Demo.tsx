@@ -1,6 +1,7 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { CodeBlock } from '@/components/ui/CodeBlock';
+import { Save, Search, BarChart3, Sparkles } from 'lucide-react';
 
 const saveExample = `// Agent saves a decision after implementing auth
 import { mem_save } from '@engram/mcp';
@@ -52,10 +53,10 @@ export function Demo() {
 
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           {/* Left: Code examples */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold">
+                <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm">
                   1
                 </div>
                 <h3 className="text-xl font-semibold text-[--color-text]">Save memories</h3>
@@ -65,7 +66,7 @@ export function Demo() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[--color-blue] flex items-center justify-center text-[--color-base] font-bold">
+                <div className="w-8 h-8 rounded-full bg-[--color-blue] flex items-center justify-center text-[--color-base] font-bold text-sm">
                   2
                 </div>
                 <h3 className="text-xl font-semibold text-[--color-text]">Search across all memories</h3>
@@ -75,7 +76,7 @@ export function Demo() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[--color-pink] flex items-center justify-center text-[--color-base] font-bold">
+                <div className="w-8 h-8 rounded-full bg-[--color-pink] flex items-center justify-center text-[--color-base] font-bold text-sm">
                   3
                 </div>
                 <h3 className="text-xl font-semibold text-[--color-text]">Explore timeline context</h3>
@@ -84,9 +85,9 @@ export function Demo() {
             </div>
           </div>
 
-          {/* Right: Visual flow */}
-          <div className="lg:sticky lg:top-8">
-            <div className="bg-[--color-surface0] rounded-2xl p-8 border border-[--color-surface1]">
+          {/* Right: Visual flow — with Lucide icons + max-height for short viewports */}
+          <div className="lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto">
+            <div className="bg-[--color-surface0] rounded-2xl p-8 border border-[--color-surface1] shadow-lg shadow-black/10">
               <h3 className="text-xl font-semibold text-[--color-text] mb-6">
                 Memory Connection Flow
               </h3>
@@ -94,8 +95,8 @@ export function Demo() {
               <div className="space-y-6">
                 {/* Step 1 */}
                 <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[--color-mauve]/20 flex items-center justify-center">
-                    <span className="text-xl">💾</span>
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-mauve]/20 border border-[--color-mauve]/30 flex items-center justify-center text-[--color-mauve]">
+                    <Save className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
                     <div className="text-[--color-text] font-medium">mem_save</div>
@@ -107,8 +108,8 @@ export function Demo() {
 
                 {/* Step 2 */}
                 <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[--color-blue]/20 flex items-center justify-center">
-                    <span className="text-xl">🔍</span>
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-blue]/20 border border-[--color-blue]/30 flex items-center justify-center text-[--color-blue]">
+                    <Search className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
                     <div className="text-[--color-text] font-medium">mem_search</div>
@@ -120,8 +121,8 @@ export function Demo() {
 
                 {/* Step 3 */}
                 <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[--color-pink]/20 flex items-center justify-center">
-                    <span className="text-xl">📊</span>
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-pink]/20 border border-[--color-pink]/30 flex items-center justify-center text-[--color-pink]">
+                    <BarChart3 className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
                     <div className="text-[--color-text] font-medium">mem_timeline</div>
@@ -133,8 +134,8 @@ export function Demo() {
 
                 {/* Result */}
                 <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[--color-green]/20 flex items-center justify-center">
-                    <span className="text-xl">✨</span>
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-green]/20 border border-[--color-green]/30 flex items-center justify-center text-[--color-green]">
+                    <Sparkles className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
                     <div className="text-[--color-green] font-medium">Context Retrieved</div>

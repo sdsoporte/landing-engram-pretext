@@ -38,7 +38,7 @@ export function Installation() {
 
           <div className="space-y-8">
             {installSteps.map((item, index) => (
-              <div key={index} className="space-y-3">
+              <div key={index} className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm">
                     {index + 1}
@@ -53,19 +53,19 @@ export function Installation() {
           </div>
 
           {/* Requirements */}
-          <div className="mt-12 p-6 rounded-lg bg-[--color-surface0] border border-[--color-surface1]">
-            <h4 className="font-semibold text-[--color-text] mb-3">Requirements</h4>
-            <ul className="space-y-2 text-[--color-subtext0]">
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[--color-green]" />
+          <div className="mt-12 p-6 rounded-xl bg-[--color-surface0] border border-[--color-surface1]">
+            <h4 className="font-semibold text-[--color-text] mb-4">Requirements</h4>
+            <ul className="space-y-3 text-[--color-subtext0]">
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green]" />
                 Go 1.21 or later
               </li>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[--color-green]" />
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green]" />
                 SQLite (embedded, no installation needed)
               </li>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[--color-green]" />
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[--color-green]" />
                 Any MCP-compatible AI agent
               </li>
             </ul>

@@ -30,7 +30,7 @@ const problems = [
 ];
 
 function ProblemCard({ problem }: { problem: typeof problems[0] }) {
-  const [ref, distance] = useNeuralTarget(`problem-${problem.title}`, 280);
+  const [ref, distance] = useNeuralTarget<HTMLDivElement>(`problem-${problem.title}`, 280);
   const spring = useSpring(distance, { stiffness: 180, damping: 24 });
   const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 160));
 
@@ -43,7 +43,7 @@ function ProblemCard({ problem }: { problem: typeof problems[0] }) {
 
   return (
     <motion.div
-      ref={ref as React.RefObject<HTMLDivElement>}
+      ref={ref}
       style={{ scale, y, boxShadow }}
       className="group relative flex items-start gap-4 p-6 rounded-3xl bg-gradient-to-br from-[--color-crust] to-[--color-mantle] border border-[--color-red]/20 hover:border-[--color-red]/50 transition-all duration-300 will-change-transform"
     >
@@ -65,7 +65,7 @@ function ProblemCard({ problem }: { problem: typeof problems[0] }) {
 }
 
 export function Problem() {
-  const [headlineRef, headlineDistance] = useNeuralTarget('problem-headline', 200);
+  const [headlineRef, headlineDistance] = useNeuralTarget<HTMLDivElement>('problem-headline', 200);
   const spring = useSpring(headlineDistance, { stiffness: 160, damping: 22 });
   const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 200));
   const headlineScale = useTransform(intensity, (i) => 1 - i * 0.06);
@@ -75,7 +75,7 @@ export function Problem() {
     <Section id="problem" variant="muted">
       <Container>
         <motion.div
-          ref={headlineRef as React.RefObject<HTMLDivElement>}
+          ref={headlineRef}
           style={{ scale: headlineScale, y: headlineY }}
           className="max-w-3xl mx-auto text-center mb-12 will-change-transform"
         >

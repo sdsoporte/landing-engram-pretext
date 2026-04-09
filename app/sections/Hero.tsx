@@ -19,9 +19,9 @@ function useProximityMotion(motionValue: ReturnType<typeof useNeuralTarget>[1], 
 }
 
 export function Hero({ stars, forks, version }: HeroProps) {
-  const [badgeRef, badgeDistance] = useNeuralTarget('hero-badge', 160);
-  const [titleRef, titleDistance] = useNeuralTarget('hero-title', 190);
-  const [subtitleRef, subtitleDistance] = useNeuralTarget('hero-subtitle', 160);
+  const [badgeRef, badgeDistance] = useNeuralTarget<HTMLDivElement>('hero-badge', 160);
+  const [titleRef, titleDistance] = useNeuralTarget<HTMLHeadingElement>('hero-title', 190);
+  const [subtitleRef, subtitleDistance] = useNeuralTarget<HTMLDivElement>('hero-subtitle', 160);
 
   const { intensity: badgeIntensity } = useProximityMotion(badgeDistance, 180);
   const { intensity: titleIntensity } = useProximityMotion(titleDistance, 220);
@@ -47,7 +47,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
         <div className="max-w-4xl mx-auto">
           {/* Badge etimológico */}
           <motion.div
-            ref={badgeRef as React.RefObject<HTMLDivElement>}
+            ref={badgeRef}
             style={{
               scale: badgeScale,
               y: badgeY,
@@ -62,7 +62,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
 
           {/* Título principal */}
           <motion.h1
-            ref={titleRef as React.RefObject<HTMLHeadingElement>}
+            ref={titleRef}
             style={{
               backgroundImage: 'linear-gradient(to right, var(--color-mauve), var(--color-pink), var(--color-blue))',
               scale: titleScale,
@@ -77,7 +77,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
 
           {/* Hook emocional */}
           <motion.div
-            ref={subtitleRef as React.RefObject<HTMLDivElement>}
+            ref={subtitleRef}
             style={{ y: subtitleY, opacity: subtitleOpacity }}
             className="mb-8 space-y-3 will-change-transform"
           >

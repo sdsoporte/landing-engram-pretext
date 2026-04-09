@@ -32,7 +32,7 @@ function SolutionNode({
   hoverShadowClass?: string;
   isCenter?: boolean;
 }) {
-  const [ref, distance] = useNeuralTarget(`solution-${id}`, 260);
+  const [ref, distance] = useNeuralTarget<HTMLDivElement>(`solution-${id}`, 260);
   const spring = useSpring(distance, { stiffness: 180, damping: 24 });
   const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 180));
 
@@ -49,7 +49,7 @@ function SolutionNode({
 
   return (
     <motion.div
-      ref={ref as React.RefObject<HTMLDivElement>}
+      ref={ref}
       style={{ scale, y, boxShadow }}
       className={`group flex items-center gap-4 p-5 rounded-2xl ${bgGradientClass} ${borderColorClass} ${isCenter ? 'border-2' : 'border'} ${hoverShadowClass ?? ''} transition-all duration-300 will-change-transform`}
     >
@@ -65,13 +65,13 @@ function SolutionNode({
 }
 
 export function Solution() {
-  const [headlineRef, headlineDistance] = useNeuralTarget('solution-headline', 180);
+  const [headlineRef, headlineDistance] = useNeuralTarget<HTMLDivElement>('solution-headline', 180);
   const headlineSpring = useSpring(headlineDistance, { stiffness: 160, damping: 22 });
   const headlineIntensity = useTransform(headlineSpring, (d) => Math.max(0, 1 - d / 180));
   const headlineScale = useTransform(headlineIntensity, (i) => 1 - i * 0.05);
   const headlineY = useTransform(headlineIntensity, (i) => -i * 12);
 
-  const [diagramRef, diagramDistance] = useNeuralTarget('solution-diagram', 280);
+  const [diagramRef, diagramDistance] = useNeuralTarget<HTMLDivElement>('solution-diagram', 280);
   const diagramSpring = useSpring(diagramDistance, { stiffness: 160, damping: 22 });
   const diagramIntensity = useTransform(diagramSpring, (d) => Math.max(0, 1 - d / 280));
   const diagramScale = useTransform(diagramIntensity, (i) => 1 + i * 0.02);
@@ -86,7 +86,7 @@ export function Solution() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text content */}
           <motion.div
-            ref={headlineRef as React.RefObject<HTMLDivElement>}
+            ref={headlineRef}
             style={{ scale: headlineScale, y: headlineY }}
             className="space-y-6 will-change-transform"
           >
@@ -127,7 +127,7 @@ export function Solution() {
             <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/5 to-[--color-blue]/5 rounded-[2rem] blur-3xl" />
 
             <motion.div
-              ref={diagramRef as React.RefObject<HTMLDivElement>}
+              ref={diagramRef}
               style={{ scale: diagramScale, boxShadow: diagramBoxShadow }}
               className="relative bg-gradient-to-br from-[--color-surface0]/80 to-[--color-crust]/80 rounded-[2rem] p-8 border border-[--color-surface1]/50 backdrop-blur-sm will-change-transform"
             >

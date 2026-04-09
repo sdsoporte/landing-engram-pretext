@@ -1,3 +1,5 @@
+'use client';
+
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { CodeBlock } from '@/components/ui/CodeBlock';
@@ -51,9 +53,9 @@ export function Demo() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
           {/* Left: Code examples */}
-          <div className="space-y-8">
+          <div className="space-y-8 w-full min-w-0">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-[--color-mauve] flex items-center justify-center text-[--color-base] font-bold text-sm">
@@ -85,9 +87,9 @@ export function Demo() {
             </div>
           </div>
 
-          {/* Right: Visual flow — with Lucide icons + max-height for short viewports */}
-          <div className="lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto">
-            <div className="bg-[--color-surface0] rounded-2xl p-8 border border-[--color-surface1] shadow-lg shadow-black/10">
+          {/* Right: Visual flow */}
+          <div className="w-full lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto">
+            <div className="bg-[--color-surface0] rounded-2xl p-6 sm:p-8 border border-[--color-surface1] shadow-lg shadow-black/10 w-full">
               <h3 className="text-xl font-semibold text-[--color-text] mb-6">
                 Memory Connection Flow
               </h3>
@@ -98,7 +100,7 @@ export function Demo() {
                   <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-mauve]/20 border border-[--color-mauve]/30 flex items-center justify-center text-[--color-mauve]">
                     <Save className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-[--color-text] font-medium">mem_save</div>
                     <div className="text-sm text-[--color-subtext0]">Store decision, bugfix, or pattern</div>
                   </div>
@@ -111,7 +113,7 @@ export function Demo() {
                   <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-blue]/20 border border-[--color-blue]/30 flex items-center justify-center text-[--color-blue]">
                     <Search className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-[--color-text] font-medium">mem_search</div>
                     <div className="text-sm text-[--color-subtext0]">Find relevant memories instantly</div>
                   </div>
@@ -124,7 +126,7 @@ export function Demo() {
                   <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-pink]/20 border border-[--color-pink]/30 flex items-center justify-center text-[--color-pink]">
                     <BarChart3 className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-[--color-text] font-medium">mem_timeline</div>
                     <div className="text-sm text-[--color-subtext0]">Explore chronological context</div>
                   </div>
@@ -137,7 +139,7 @@ export function Demo() {
                   <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[--color-green]/20 border border-[--color-green]/30 flex items-center justify-center text-[--color-green]">
                     <Sparkles className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-[--color-green] font-medium">Context Retrieved</div>
                     <div className="text-sm text-[--color-subtext0]">Agent has full context to continue work</div>
                   </div>

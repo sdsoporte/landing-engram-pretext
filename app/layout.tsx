@@ -77,7 +77,9 @@ export default function RootLayout({
           <NeuralNetwork />
 
         </div>
-        {children}
+        <main className="relative z-10 flex flex-col">
+          {children}
+        </main>
       </body>
     </html>
   );

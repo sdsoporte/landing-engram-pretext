@@ -1,32 +1,38 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { MotionValue } from 'framer-motion';
-import { registerNeuralTarget, updateNeuralTarget, unregisterNeuralTarget } from '@/lib/neural-targets';
+import { registerNeuralTarget, updateNeuralTarget, unregisterNeuralTarget, getNeuralTargetMotion } from '@/lib/neural-targets';
 
-export function useNeuralTarget(id: string, range = 220): [React.RefObject<HTMLElement | null>, MotionValue<number>] {
-  const ref = useRef<HTMLElement>(null);
-  const motionRef = useRef<MotionValue<number> | null>(null);
+export function useNeuralTarget<T extends HTMLElement = HTMLElement>(
+  id: string,
+  range = 220
+): [React.RefObject<T | null>, MotionValue<number>] {
+  const ref = useRef<T>(null);
+  const fallbackMotion = useMemo(() => new MotionValue(1000), []);
 
   useEffect(() => {
     if (!ref.current) return;
-    motionRef.current = registerNeuralTarget(id, ref.current, range);
+    registerNeuralTarget(id, ref.current, range);
 
     const handle = () => {
       if (ref.current) updateNeuralTarget(id, ref.current);
     };
 
     window.addEventListener('resize', handle);
-    window.addEventListener('scroll', handle, { passive: true } as EventListenerOptions);
-    const interval = setInterval(handle, 500);
+    window.addEventListener('scroll', handle, { passive: true });
 
     return () => {
       window.removeEventListener('resize', handle);
       window.removeEventListener('scroll', handle);
-      clearInterval(interval);
       unregisterNeuralTarget(id);
     };
   }, [id, range]);
 
-  return [ref, motionRef.current ?? new MotionValue(1000)];
+  const motionValue = useMemo(() => {
+    if (typeof window === 'undefined') return fallbackMotion;
+    return getNeuralTargetMotion(id) ?? fallbackMotion;
+  }, [id, fallbackMotion]);
+
+  return [ref, motionValue];
 }

@@ -14,6 +14,13 @@ import {
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { useNeuralTarget } from '@/hooks/useNeuralTarget';
 
+function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 const features = [
   {
     icon: <Terminal className="w-6 h-6" />,
@@ -54,7 +61,7 @@ const features = [
 ];
 
 function FeatureCard({ feature }: { feature: typeof features[0] }) {
-  const [ref, distance] = useNeuralTarget(`feature-${feature.title}`, 220);
+  const [ref, distance] = useNeuralTarget<HTMLDivElement>(`feature-${slugify(feature.title)}`, 220);
   const spring = useSpring(distance, { stiffness: 180, damping: 24 });
   const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 220));
 
@@ -67,7 +74,7 @@ function FeatureCard({ feature }: { feature: typeof features[0] }) {
 
   return (
     <motion.div
-      ref={ref as React.RefObject<HTMLDivElement>}
+      ref={ref}
       style={{ scale, y, boxShadow }}
       className="will-change-transform"
     >
@@ -81,7 +88,7 @@ function FeatureCard({ feature }: { feature: typeof features[0] }) {
 }
 
 export function Features() {
-  const [headlineRef, headlineDistance] = useNeuralTarget('features-headline', 200);
+  const [headlineRef, headlineDistance] = useNeuralTarget<HTMLDivElement>('features-headline', 200);
   const spring = useSpring(headlineDistance, { stiffness: 160, damping: 22 });
   const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 200));
   const headlineScale = useTransform(intensity, (i) => 1 - i * 0.05);
@@ -91,7 +98,7 @@ export function Features() {
     <Section id="features" variant="muted">
       <Container>
         <motion.div
-          ref={headlineRef as React.RefObject<HTMLDivElement>}
+          ref={headlineRef}
           style={{ scale: headlineScale, y: headlineY }}
           className="text-center mb-12 will-change-transform"
         >

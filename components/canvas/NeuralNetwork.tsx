@@ -41,8 +41,11 @@ const MAIN_NODE_CHANCE = 0.3;
 
 export function NeuralNetwork({ className }: NeuralNetworkProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const nodesRef = useRef<Node[]>([]);
   const animationRef = useRef<number | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const lastSizeRef = useRef<{ width: number; height: number } | null>(null);
   const reducedMotion = useReducedMotion();
 
   function initNodes(width: number, height: number) {
@@ -73,9 +76,12 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     nodesRef.current = nodes;
   }
 
-  function draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  function draw(width: number, height: number) {
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+
     const nodes = nodesRef.current;
-    const isMobile = Math.min(width, height) < 768;
+    const isMobile = width < 768;
     const connectionDistance = Math.min(width, height) * (isMobile ? 0.14 : 0.16);
 
     ctx.clearRect(0, 0, width, height);
@@ -104,7 +110,6 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
 
     // Nodos
     for (const node of nodes) {
-      node.pulse += node.pulseSpeed;
       const pulseScale = 1 + Math.sin(node.pulse) * 0.18;
 
       if (node.isMain) {
@@ -147,6 +152,9 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     const targets = getNeuralTargets();
 
     for (const node of nodes) {
+      // Actualizar pulse en la fase de update, no en draw
+      node.pulse += node.pulseSpeed;
+
       // Fuerza de repulsión de los targets (DOM elements)
       let fx = 0;
       let fy = 0;
@@ -180,7 +188,7 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
       node.x += node.vx;
       node.y += node.vy;
 
-      const padding = Math.min(width, height) < 768 ? 12 : 20;
+      const padding = width < 768 ? 12 : 20;
       if (node.x < padding) {
         node.vx = Math.abs(node.vx) * 0.9 + 0.2;
         node.x = padding;
@@ -215,7 +223,7 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
   function animate() {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = ctxRef.current;
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
@@ -228,7 +236,7 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     }
 
     update(logicalWidth, logicalHeight);
-    draw(ctx, logicalWidth, logicalHeight);
+    draw(logicalWidth, logicalHeight);
 
     animationRef.current = requestAnimationFrame(animate);
   }
@@ -243,15 +251,34 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
     const height = parent.clientHeight;
     if (width > 0 && height > 0) {
       const dpr = window.devicePixelRatio || 1;
+      const prevWidth = canvas.width;
+      const prevHeight = canvas.height;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
       const ctx = canvas.getContext('2d', { alpha: true });
-      if (ctx) ctx.scale(dpr, dpr);
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+        ctxRef.current = ctx;
+      }
 
-      initNodes(width, height);
+      const last = lastSizeRef.current;
+      const areaChanged = last
+        ? Math.abs(width * height - last.width * last.height) / Math.max(width * height, last.width * last.height) > 0.3
+        : true;
+
+      if (areaChanged || nodesRef.current.length === 0) {
+        initNodes(width, height);
+      }
+
+      lastSizeRef.current = { width, height };
+
+      // Si reduced motion está activo, redibujar una vez tras resize
+      if (reducedMotion) {
+        if (ctx) draw(width, height);
+      }
     }
   }
 
@@ -261,12 +288,19 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
 
     setupCanvas();
 
-    let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== 'undefined' && canvas.parentElement) {
-      resizeObserver = new ResizeObserver(() => setupCanvas());
-      resizeObserver.observe(canvas.parentElement);
+      const ro = new ResizeObserver(() => setupCanvas());
+      resizeObserverRef.current = ro;
+      ro.observe(canvas.parentElement);
     } else {
       window.addEventListener('resize', setupCanvas);
+    }
+
+    // Escuchar cambios de DPR (zoom, cambio de monitor)
+    const dprMedia = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    const handleDprChange = () => setupCanvas();
+    if ('addEventListener' in dprMedia) {
+      dprMedia.addEventListener('change', handleDprChange);
     }
 
     const handleVisibilityChange = () => {
@@ -290,13 +324,19 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
         const dpr = window.devicePixelRatio || 1;
         const w = canvas.width / dpr;
         const h = canvas.height / dpr;
-        if (w > 0 && h > 0) draw(ctx, w, h);
+        if (w > 0 && h > 0) {
+          ctxRef.current = ctx;
+          draw(w, h);
+        }
       }
     }
 
     return () => {
-      if (resizeObserver && canvas.parentElement) resizeObserver.disconnect();
-      else window.removeEventListener('resize', setupCanvas);
+      resizeObserverRef.current?.disconnect();
+      window.removeEventListener('resize', setupCanvas);
+      if ('removeEventListener' in dprMedia) {
+        dprMedia.removeEventListener('change', handleDprChange);
+      }
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };

@@ -1,7 +1,68 @@
+'use client';
+
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Bot, Brain, Database } from 'lucide-react';
+import { motion, useSpring, useTransform } from 'framer-motion';
+import { useNeuralTarget } from '@/hooks/useNeuralTarget';
+
+function SolutionNode({
+  id,
+  icon,
+  title,
+  subtitle,
+  colorClass,
+  borderColorClass,
+  bgGradientClass,
+  iconBgClass,
+  shadowClass,
+  hoverShadowClass,
+  isCenter = false,
+}: {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  colorClass: string;
+  borderColorClass: string;
+  bgGradientClass: string;
+  iconBgClass: string;
+  shadowClass: string;
+  hoverShadowClass?: string;
+  isCenter?: boolean;
+}) {
+  const [ref, distance] = useNeuralTarget(`solution-${id}`, 180);
+  const spring = useSpring(distance, { stiffness: 180, damping: 24 });
+  const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 180));
+
+  const scale = useTransform(intensity, (i) => 1 + i * 0.04);
+  const y = useTransform(intensity, (i) => -i * 12);
+  const boxShadow = useTransform(intensity, (i) => {
+    const spread = isCenter ? 30 + i * 25 : 20 + i * 20;
+    const alpha = 0.1 + i * 0.4;
+    // Extraemos el color base del shadowClass para interpolar
+    if (id === 'agent') return `0 0 ${spread}px -5px rgba(137, 180, 250, ${alpha})`;
+    if (id === 'engram') return `0 0 ${spread}px -5px rgba(203, 166, 247, ${alpha})`;
+    return `0 0 ${spread}px -5px rgba(166, 227, 161, ${alpha})`;
+  });
+
+  return (
+    <motion.div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      style={{ scale, y, boxShadow }}
+      className={`group flex items-center gap-4 p-5 rounded-2xl ${bgGradientClass} ${borderColorClass} ${isCenter ? 'border-2' : 'border'} ${hoverShadowClass ?? ''} transition-all duration-300 will-change-transform`}
+    >
+      <div className={`w-12 h-12 rounded-xl ${iconBgClass} flex items-center justify-center ${colorClass} ${shadowClass}`}>
+        {icon}
+      </div>
+      <div>
+        <div className={`font-semibold ${isCenter ? colorClass : 'text-[--color-text]'}`}>{title}</div>
+        <div className="text-sm text-[--color-subtext0]">{subtitle}</div>
+      </div>
+    </motion.div>
+  );
+}
 
 export function Solution() {
   return (
@@ -42,59 +103,69 @@ export function Solution() {
             </Button>
           </div>
 
-          {/* Right: Neural flow diagram — organic node style */}
+          {/* Right: Neural flow diagram */}
           <div className="relative">
-            {/* Background glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-[--color-mauve]/5 to-[--color-blue]/5 rounded-[2rem] blur-3xl" />
-            
+
             <div className="relative bg-gradient-to-br from-[--color-surface0]/80 to-[--color-crust]/80 rounded-[2rem] p-8 border border-[--color-surface1]/50 backdrop-blur-sm">
               <div className="space-y-4">
                 {/* Agent Node */}
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-blue]/10 to-transparent border border-[--color-blue]/20 hover:border-[--color-blue]/40 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-blue]/20 flex items-center justify-center text-[--color-blue] shadow-[0_0_15px_-3px_var(--color-blue)]/30">
-                    <Bot className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-[--color-text]">AI Agent</div>
-                    <div className="text-sm text-[--color-subtext0]">Claude, Cursor, OpenCode...</div>
-                  </div>
-                </div>
+                <SolutionNode
+                  id="agent"
+                  icon={<Bot className="w-6 h-6" />}
+                  title="AI Agent"
+                  subtitle="Claude, Cursor, OpenCode..."
+                  colorClass="text-[--color-blue]"
+                  borderColorClass="border-[--color-blue]/20 hover:border-[--color-blue]/40"
+                  bgGradientClass="bg-gradient-to-r from-[--color-blue]/10 to-transparent"
+                  iconBgClass="bg-[--color-blue]/20"
+                  shadowClass="shadow-[0_0_15px_-3px_var(--color-blue)]/30"
+                />
 
-                {/* Connection line with pulse */}
+                {/* Connection line */}
                 <div className="flex justify-center py-1">
                   <div className="relative w-px h-6 bg-gradient-to-b from-[--color-blue] to-[--color-mauve]">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[--color-mauve] animate-pulse shadow-[0_0_8px_var(--color-mauve)]" />
                   </div>
                 </div>
 
-                {/* Engram Node — highlighted center */}
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-mauve]/20 to-[--color-mauve]/5 border-2 border-[--color-mauve]/40 shadow-[0_0_30px_-10px_var(--color-mauve)]/30 hover:shadow-[0_0_40px_-8px_var(--color-mauve)]/40 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-mauve]/30 flex items-center justify-center text-[--color-mauve] shadow-[0_0_20px_-3px_var(--color-mauve)]/50">
-                    <Brain className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-[--color-mauve]">engram</div>
-                    <div className="text-sm text-[--color-subtext0]">Go binary + SQLite</div>
-                  </div>
-                </div>
+                {/* Engram Node */}
+                <SolutionNode
+                  id="engram"
+                  icon={<Brain className="w-6 h-6" />}
+                  title="engram"
+                  subtitle="Go binary + SQLite"
+                  colorClass="text-[--color-mauve]"
+                  borderColorClass="border-[--color-mauve]/40"
+                  bgGradientClass="bg-gradient-to-r from-[--color-mauve]/20 to-[--color-mauve]/5"
+                  iconBgClass="bg-[--color-mauve]/30"
+                  shadowClass="shadow-[0_0_20px_-3px_var(--color-mauve)]/50"
+                  hoverShadowClass="hover:shadow-[0_0_40px_-8px_var(--color-mauve)]/40"
+                  isCenter
+                />
 
-                {/* Connection line with pulse */}
+                {/* Connection line */}
                 <div className="flex justify-center py-1">
                   <div className="relative w-px h-6 bg-gradient-to-b from-[--color-mauve] to-[--color-green]">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[--color-green] animate-pulse shadow-[0_0_8px_var(--color-green)]" style={{ animationDelay: '0.5s' }} />
+                    <div
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[--color-green] animate-pulse shadow-[0_0_8px_var(--color-green)]"
+                      style={{ animationDelay: '0.5s' }}
+                    />
                   </div>
                 </div>
 
                 {/* Database Node */}
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[--color-green]/10 to-transparent border border-[--color-green]/20 hover:border-[--color-green]/40 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-[--color-green]/20 flex items-center justify-center text-[--color-green] shadow-[0_0_15px_-3px_var(--color-green)]/30">
-                    <Database className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-[--color-text]">SQLite + FTS5</div>
-                    <div className="text-sm text-[--color-subtext0]">~/.engram/engram.db</div>
-                  </div>
-                </div>
+                <SolutionNode
+                  id="db"
+                  icon={<Database className="w-6 h-6" />}
+                  title="SQLite + FTS5"
+                  subtitle="~/.engram/engram.db"
+                  colorClass="text-[--color-green]"
+                  borderColorClass="border-[--color-green]/20 hover:border-[--color-green]/40"
+                  bgGradientClass="bg-gradient-to-r from-[--color-green]/10 to-transparent"
+                  iconBgClass="bg-[--color-green]/20"
+                  shadowClass="shadow-[0_0_15px_-3px_var(--color-green)]/30"
+                />
               </div>
             </div>
           </div>

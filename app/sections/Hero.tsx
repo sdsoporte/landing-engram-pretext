@@ -1,13 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Star, GitFork } from 'lucide-react';
-import { motion, useSpring, useTransform, useMotionValue } from 'framer-motion';
-import { prepareWithSegments, measureNaturalWidth } from '@chenglou/pretext';
-import { waveXMotion } from '@/lib/wave-motion';
-import { NeuralNetwork } from '@/components/canvas/NeuralNetwork';
+import { motion, useSpring, useTransform } from 'framer-motion';
+import { useNeuralTarget } from '@/hooks/useNeuralTarget';
 
 interface HeroProps {
   stars: string;
@@ -15,145 +12,44 @@ interface HeroProps {
   version: string;
 }
 
+function useProximityMotion(motionValue: ReturnType<typeof useNeuralTarget>[1], range: number) {
+  const spring = useSpring(motionValue, { stiffness: 160, damping: 22 });
+  const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / range));
+  return { spring, intensity };
+}
+
 export function Hero({ stars, forks, version }: HeroProps) {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
+  const [badgeRef, badgeDistance] = useNeuralTarget('hero-badge', 180);
+  const [titleRef, titleDistance] = useNeuralTarget('hero-title', 220);
+  const [subtitleRef, subtitleDistance] = useNeuralTarget('hero-subtitle', 180);
 
-  const titleRangeRef = useRef(260);
-  const badgeRangeRef = useRef(200);
+  const { intensity: badgeIntensity } = useProximityMotion(badgeDistance, 180);
+  const { intensity: titleIntensity } = useProximityMotion(titleDistance, 220);
+  const { intensity: subtitleIntensity } = useProximityMotion(subtitleDistance, 180);
 
-  const springX = useSpring(waveXMotion, { stiffness: 180, damping: 20 });
-  const centerXValue = useMotionValue(0);
-  const waveDirectionValue = useMotionValue(1);
+  const badgeScale = useTransform(badgeIntensity, (i) => 1 - i * 0.15);
+  const badgeY = useTransform(badgeIntensity, (i) => -i * 28);
+  const badgeOpacity = useTransform(badgeIntensity, (i) => Math.max(0.35, 1 - i * 0.55));
 
-  // Medir texto con pretext y calcular rangos de reacción exactos
-  useEffect(() => {
-    function measure() {
-      if (titleRef.current) {
-        const style = window.getComputedStyle(titleRef.current);
-        const fontFamily = style.fontFamily.split(',')[0].replace(/["']/g, '');
-        const font = `${style.fontWeight} ${style.fontSize} ${fontFamily}`;
-        const prepared = prepareWithSegments('Engram', font);
-        const w = measureNaturalWidth(prepared);
-        titleRangeRef.current = w / 2 + 160;
-      }
-      if (badgeRef.current) {
-        const style = window.getComputedStyle(badgeRef.current);
-        const fontFamily = style.fontFamily.split(',')[0].replace(/["']/g, '');
-        const font = `${style.fontWeight} ${style.fontSize} ${fontFamily}`;
-        const text = badgeRef.current.innerText || '';
-        const prepared = prepareWithSegments(text, font);
-        const w = measureNaturalWidth(prepared);
-        badgeRangeRef.current = w / 2 + 120;
-      }
-    }
+  const titleScale = useTransform(titleIntensity, (i) => 1 - i * 0.18);
+  const titleY = useTransform(titleIntensity, (i) => -i * 34);
+  const titleOpacity = useTransform(titleIntensity, (i) => Math.max(0.3, 1 - i * 0.6));
+  const titleSpacing = useTransform(titleIntensity, (i) => `${i * 0.08}em`);
 
-    measure();
-    const handleResize = () => {
-      centerXValue.set(window.innerWidth / 2);
-      measure();
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [centerXValue]);
-
-  // Actualizar dirección de la wave para saber hacia dónde empujar el badge
-  useEffect(() => {
-    const unsubscribe = waveXMotion.on('change', (x) => {
-      const center = centerXValue.get();
-      waveDirectionValue.set(x < center ? -1 : 1);
-    });
-    return unsubscribe;
-  }, [centerXValue, waveDirectionValue]);
-
-  const titleScale = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return 1 - intensity * 0.18;
-  });
-
-  const titleY = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return -intensity * 32;
-  });
-
-  const titleOpacity = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return Math.max(0.35, 1 - intensity * 0.55);
-  });
-
-  const titleSpacing = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return `${intensity * 0.08}em`;
-  });
-
-  const badgeScale = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return 1 - intensity * 0.2;
-  });
-
-  const badgeX = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return intensity * waveDirectionValue.get() * 70;
-  });
-
-  const badgeY = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return -intensity * 22;
-  });
-
-  const badgeOpacity = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return Math.max(0.35, 1 - intensity * 0.5);
-  });
-
-  const subtitleY = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return -intensity * 18;
-  });
-
-  const subtitleOpacity = useTransform(springX, (x) => {
-    const center = centerXValue.get();
-    const dist = Math.abs(x - center);
-    const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return Math.max(0.4, 1 - intensity * 0.4);
-  });
+  const subtitleY = useTransform(subtitleIntensity, (i) => -i * 18);
+  const subtitleOpacity = useTransform(subtitleIntensity, (i) => Math.max(0.4, 1 - i * 0.5));
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[--color-base]/60 via-[--color-base]/40 to-[--color-base]/60" />
 
-      {/* Wave overlay que pasa POR ENCIMA del texto */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
-        <NeuralNetwork mode="wave" className="opacity-100" />
-      </div>
-
       <Container className="relative z-10 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Badge etimológico */}
           <motion.div
-            ref={badgeRef}
+            ref={badgeRef as React.RefObject<HTMLDivElement>}
             style={{
               scale: badgeScale,
-              x: badgeX,
               y: badgeY,
               opacity: badgeOpacity,
             }}
@@ -166,7 +62,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
 
           {/* Título principal */}
           <motion.h1
-            ref={titleRef}
+            ref={titleRef as React.RefObject<HTMLHeadingElement>}
             style={{
               backgroundImage: 'linear-gradient(to right, var(--color-mauve), var(--color-pink), var(--color-blue))',
               scale: titleScale,
@@ -181,6 +77,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
 
           {/* Hook emocional */}
           <motion.div
+            ref={subtitleRef as React.RefObject<HTMLDivElement>}
             style={{ y: subtitleY, opacity: subtitleOpacity }}
             className="mb-8 space-y-3 will-change-transform"
           >

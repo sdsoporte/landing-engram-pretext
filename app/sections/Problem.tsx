@@ -1,6 +1,10 @@
+'use client';
+
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { Brain, RefreshCw, AlertTriangle, Puzzle } from 'lucide-react';
+import { motion, useSpring, useTransform } from 'framer-motion';
+import { useNeuralTarget } from '@/hooks/useNeuralTarget';
 
 const problems = [
   {
@@ -25,6 +29,41 @@ const problems = [
   },
 ];
 
+function ProblemCard({ problem }: { problem: typeof problems[0] }) {
+  const [ref, distance] = useNeuralTarget(`problem-${problem.title}`, 160);
+  const spring = useSpring(distance, { stiffness: 180, damping: 24 });
+  const intensity = useTransform(spring, (d) => Math.max(0, 1 - d / 160));
+
+  const scale = useTransform(intensity, (i) => 1 - i * 0.04);
+  const y = useTransform(intensity, (i) => -i * 10);
+  const boxShadow = useTransform(intensity, (i) => {
+    const o = 0.1 + i * 0.35;
+    return `0 0 ${30 + i * 20}px -5px rgba(243, 139, 168, ${o})`;
+  });
+
+  return (
+    <motion.div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      style={{ scale, y, boxShadow }}
+      className="group relative flex items-start gap-4 p-6 rounded-3xl bg-gradient-to-br from-[--color-crust] to-[--color-mantle] border border-[--color-red]/20 hover:border-[--color-red]/50 transition-all duration-300 will-change-transform"
+    >
+      {/* Icon node */}
+      <div className="relative z-10 flex-shrink-0 w-14 h-14 rounded-2xl bg-[--color-red]/10 border border-[--color-red]/20 flex items-center justify-center text-[--color-red] group-hover:shadow-[0_0_20px_-2px_var(--color-red)]/30 transition-all duration-300">
+        {problem.icon}
+      </div>
+      <div className="relative z-10 flex-1">
+        <h3 className="text-xl font-semibold text-[--color-text] mb-2">
+          {problem.title}
+        </h3>
+        <p className="text-[--color-subtext0] leading-relaxed">{problem.description}</p>
+      </div>
+      
+      {/* Connection dot */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[--color-red]/30 group-hover:bg-[--color-red]/60 transition-colors duration-300" />
+    </motion.div>
+  );
+}
+
 export function Problem() {
   return (
     <Section id="problem" variant="muted">
@@ -42,24 +81,7 @@ export function Problem() {
         {/* Problem nodes — organic, rounded, with glow */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {problems.map((problem) => (
-            <div
-              key={problem.title}
-              className="group relative flex items-start gap-4 p-6 rounded-3xl bg-gradient-to-br from-[--color-crust] to-[--color-mantle] border border-[--color-red]/20 hover:border-[--color-red]/50 transition-all duration-300 hover:shadow-[0_0_30px_-5px_var(--color-red)]/10"
-            >
-              {/* Icon node */}
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[--color-red]/10 border border-[--color-red]/20 flex items-center justify-center text-[--color-red] group-hover:shadow-[0_0_20px_-2px_var(--color-red)]/30 transition-all duration-300">
-                {problem.icon}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-[--color-text] mb-2">
-                  {problem.title}
-                </h3>
-                <p className="text-[--color-subtext0] leading-relaxed">{problem.description}</p>
-              </div>
-              
-              {/* Connection dot */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[--color-red]/30 group-hover:bg-[--color-red]/60 transition-colors duration-300" />
-            </div>
+            <ProblemCard key={problem.title} problem={problem} />
           ))}
         </div>
       </Container>

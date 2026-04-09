@@ -74,7 +74,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[--color-base] text-[--color-text] relative">
         {/* Global neural network background */}
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <NeuralNetwork className="opacity-60" />
+          <NeuralNetwork />
+
         </div>
         {children}
       </body>

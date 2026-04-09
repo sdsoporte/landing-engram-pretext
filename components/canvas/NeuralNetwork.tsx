@@ -61,13 +61,12 @@ export function NeuralNetwork({ className }: NeuralNetworkProps) {
       nodes.push({
         x,
         y,
-        vx: (Math.random() - 0.5) * 0.04,
-        vy: (Math.random() - 0.5) * 0.04,
-        // NODOS MUCHO MÁS GRANDES: 4-8px
+        vx: (Math.random() - 0.5) * 0.12, // MÁS RÁPIDO: 0.04 → 0.12
+        vy: (Math.random() - 0.5) * 0.12,
         radius: isMain ? Math.random() * 3 + 5 : Math.random() * 2 + 4,
         color: NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)],
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.015,
+        pulseSpeed: 0.04 + Math.random() * 0.03, // MÁS RÁPIDO: 0.02 → 0.04
         isMain,
       });
     }

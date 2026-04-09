@@ -75,17 +75,17 @@ export function NeuralNetwork({ className, mode = 'full' }: NeuralNetworkProps) 
     nodesRef.current = nodes;
 
     const waveNodes: Node[] = [];
-    const waveNodeCount = 22;
+    const waveNodeCount = 12;
     for (let i = 0; i < waveNodeCount; i++) {
       waveNodes.push({
-        x: -200 - Math.random() * 200,
-        y: height * 0.48 + (Math.random() - 0.5) * 100,
-        vx: 1.4 + Math.random() * 0.8,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 3 + 5,
-        color: COLORS.mauve,
+        x: -180 - i * 25 - Math.random() * 40,
+        y: height * 0.5 + Math.sin(i * 0.7) * 35,
+        vx: 1.0 + Math.random() * 0.7,
+        vy: 0,
+        radius: Math.random() * 2 + 2.5,
+        color: i % 3 === 0 ? COLORS.pink : (i % 2 === 0 ? COLORS.mauve : COLORS.lavender),
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.1 + Math.random() * 0.04,
+        pulseSpeed: 0.08 + Math.random() * 0.03,
         isMain: true,
       });
     }
@@ -94,65 +94,73 @@ export function NeuralNetwork({ className, mode = 'full' }: NeuralNetworkProps) 
 
   function drawWave(ctx: CanvasRenderingContext2D, width: number, height: number) {
     const waveNodes = waveNodesRef.current;
-    const waveX = waveXRef.current;
 
-    // Glow horizontal intenso detrás de la wave
-    const gradient = ctx.createLinearGradient(waveX - 200, 0, waveX + 200, 0);
-    gradient.addColorStop(0, 'transparent');
-    gradient.addColorStop(0.5, 'rgba(203, 166, 247, 0.14)');
-    gradient.addColorStop(1, 'transparent');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(waveX - 200, 0, 400, height);
+    // Trazar una línea curva suave conectando los nodos
+    if (waveNodes.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(waveNodes[0].x, waveNodes[0].y);
+      for (let i = 1; i < waveNodes.length - 1; i++) {
+        const xc = (waveNodes[i].x + waveNodes[i + 1].x) / 2;
+        const yc = (waveNodes[i].y + waveNodes[i + 1].y) / 2;
+        ctx.quadraticCurveTo(waveNodes[i].x, waveNodes[i].y, xc, yc);
+      }
+      ctx.lineTo(waveNodes[waveNodes.length - 1].x, waveNodes[waveNodes.length - 1].y);
+      ctx.strokeStyle = 'rgba(203, 166, 247, 0.35)';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
 
-    // Conexiones entre nodos de la wave
-    ctx.globalAlpha = 0.9;
+    // Conexiones delgadas entre vecinos cercanos
+    ctx.globalAlpha = 0.75;
     for (let i = 0; i < waveNodes.length; i++) {
       for (let j = i + 1; j < waveNodes.length; j++) {
         const dx = waveNodes[i].x - waveNodes[j].x;
         const dy = waveNodes[i].y - waveNodes[j].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 90) {
-          const opacity = (1 - distance / 90);
+        if (distance < 55) {
+          const opacity = (1 - distance / 55) * 0.8;
           ctx.beginPath();
           ctx.moveTo(waveNodes[i].x, waveNodes[i].y);
           ctx.lineTo(waveNodes[j].x, waveNodes[j].y);
-          ctx.strokeStyle = `rgba(230, 200, 255, ${opacity})`;
-          ctx.lineWidth = 2.2;
+          ctx.strokeStyle = `rgba(230, 210, 255, ${opacity})`;
+          ctx.lineWidth = 1.2;
           ctx.stroke();
         }
       }
     }
 
-    // Nodos de la wave — más nítidos, menos borrosos
-    for (const node of waveNodes) {
+    // Nodos de la wave — estrellas pequeñas con halo suave
+    for (let idx = 0; idx < waveNodes.length; idx++) {
+      const node = waveNodes[idx];
       node.pulse += node.pulseSpeed;
-      const pulseScale = 1 + Math.sin(node.pulse) * 0.22;
+      const pulseScale = 1 + Math.sin(node.pulse) * 0.18;
 
-      // Glow moderado
+      // Halo muy suave
       const glow = ctx.createRadialGradient(
         node.x, node.y, 0,
-        node.x, node.y, node.radius * 4 * pulseScale
+        node.x, node.y, node.radius * 3.5 * pulseScale
       );
-      glow.addColorStop(0, node.color);
-      glow.addColorStop(0.5, node.color + '70');
+      glow.addColorStop(0, node.color + '60');
       glow.addColorStop(1, 'transparent');
 
       ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 4 * pulseScale, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, node.radius * 3.5 * pulseScale, 0, Math.PI * 2);
       ctx.fillStyle = glow;
-      ctx.globalAlpha = 0.9;
+      ctx.globalAlpha = 0.7;
       ctx.fill();
 
-      // Núcleo blanco brillante
+      // Corona blanca
       ctx.beginPath();
-      ctx.arc(node.x, node.y, (node.radius * 0.7 + 1.5) * pulseScale, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, (node.radius + 1) * pulseScale, 0, Math.PI * 2);
       ctx.fillStyle = COLORS.white;
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha = 0.95;
       ctx.fill();
 
       // Centro coloreado
       ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 0.35 * pulseScale, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, node.radius * 0.5 * pulseScale, 0, Math.PI * 2);
       ctx.fillStyle = node.color;
       ctx.globalAlpha = 1;
       ctx.fill();
@@ -247,24 +255,26 @@ export function NeuralNetwork({ className, mode = 'full' }: NeuralNetworkProps) 
     const waveNodes = waveNodesRef.current;
     let waveCenterX = 0;
     const now = performance.now();
+    const baseY = height * 0.5;
+
     for (let i = 0; i < waveNodes.length; i++) {
       const node = waveNodes[i];
       node.x += node.vx;
-      node.y += node.vy;
       waveCenterX += node.x;
 
-      const targetY = height * 0.48 + Math.sin(now * 0.001 + i * 0.5) * 40;
-      node.vy += (targetY - node.y) * 0.003;
-      node.vy *= 0.94;
+      // Cada nodo sigue una onda senoidal desfasada para efecto serpiente
+      const phase = now * 0.0012 + i * 0.55;
+      const targetY = baseY + Math.sin(phase) * 38 + Math.cos(phase * 0.7) * 18;
+      node.y += (targetY - node.y) * 0.06;
     }
     waveCenterX /= waveNodes.length;
     waveXRef.current = waveCenterX;
 
     if (waveCenterX > width + 200) {
       for (let i = 0; i < waveNodes.length; i++) {
-        waveNodes[i].x = -200 - Math.random() * 200;
-        waveNodes[i].y = height * 0.48 + (Math.random() - 0.5) * 100;
-        waveNodes[i].vx = 1.4 + Math.random() * 0.8;
+        waveNodes[i].x = -150 - i * 25 - Math.random() * 40;
+        waveNodes[i].y = baseY + Math.sin(i * 0.7) * 35;
+        waveNodes[i].vx = 1.0 + Math.random() * 0.7;
       }
     }
   }

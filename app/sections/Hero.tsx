@@ -71,70 +71,70 @@ export function Hero({ stars, forks, version }: HeroProps) {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return 1 - intensity * 0.35;
+    return 1 - intensity * 0.18;
   });
 
   const titleY = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return -intensity * 55;
+    return -intensity * 32;
   });
 
   const titleOpacity = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return Math.max(0.2, 1 - intensity * 0.75);
+    return Math.max(0.35, 1 - intensity * 0.55);
   });
 
   const titleSpacing = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return `${intensity * 0.22}em`;
+    return `${intensity * 0.08}em`;
   });
 
   const badgeScale = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return 1 - intensity * 0.35;
+    return 1 - intensity * 0.2;
   });
 
   const badgeX = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return intensity * waveDirectionValue.get() * 120;
+    return intensity * waveDirectionValue.get() * 70;
   });
 
   const badgeY = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return -intensity * 40;
+    return -intensity * 22;
   });
 
   const badgeOpacity = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / badgeRangeRef.current);
-    return Math.max(0.25, 1 - intensity * 0.65);
+    return Math.max(0.35, 1 - intensity * 0.5);
   });
 
   const subtitleY = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return -intensity * 35;
+    return -intensity * 18;
   });
 
   const subtitleOpacity = useTransform(springX, (x) => {
     const center = centerXValue.get();
     const dist = Math.abs(x - center);
     const intensity = Math.max(0, 1 - dist / titleRangeRef.current);
-    return Math.max(0.3, 1 - intensity * 0.55);
+    return Math.max(0.4, 1 - intensity * 0.4);
   });
 
   return (
@@ -157,7 +157,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
               y: badgeY,
               opacity: badgeOpacity,
             }}
-            className="mb-6 inline-flex flex-col sm:flex-row items-center gap-2 px-5 py-2.5 rounded-full bg-[--color-surface0]/70 border border-[--color-mauve]/25 backdrop-blur-sm will-change-transform"
+            className="relative z-10 mb-6 inline-flex flex-col sm:flex-row items-center gap-2 px-5 py-2.5 rounded-full bg-[--color-surface0]/70 border border-[--color-mauve]/25 backdrop-blur-sm will-change-transform"
           >
             <span className="text-sm font-mono font-semibold text-[--color-mauve]">engram</span>
             <span className="hidden sm:block text-[--color-surface2]">·</span>
@@ -174,7 +174,7 @@ export function Hero({ stars, forks, version }: HeroProps) {
               opacity: titleOpacity,
               letterSpacing: titleSpacing,
             }}
-            className="mb-6 text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight bg-clip-text text-transparent will-change-transform"
+            className="relative z-10 mb-6 text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight bg-clip-text text-transparent will-change-transform"
           >
             Engram
           </motion.h1>
